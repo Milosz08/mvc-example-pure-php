@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+use Exception;
+
 // Klasa konfiguracyjna umożliwiająca wprowadzenie zmienny KLUCZ -> WARTOŚĆ do tablicy globalnej.
 class Config
 {

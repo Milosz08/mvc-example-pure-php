@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 // Klasa przechowująca metody odpowiadające za renderowanie widoków.
 class Renderer
 {

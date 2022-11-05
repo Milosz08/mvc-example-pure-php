@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Services;
+
+use Exception;
+use App\Core\Config;
+
+// Klasa serwisu dla kontrolera UsersController.
 class UsersService
 {
     // tablica z polami formularza dodawania/edytowania użytkownika

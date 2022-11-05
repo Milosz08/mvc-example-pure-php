@@ -1,5 +1,11 @@
 <?php
 
+namespace App\Services;
+
+use App\Core\DbContext;
+use App\Models\BookModel;
+
+// Klasa serwisu dla kontrolera BooksController.
 class BooksService
 {
     private $_form_data = array('title', 'authors', 'copies');

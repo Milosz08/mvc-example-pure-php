@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+use Exception;
+
 // Główna klasa aplikacji odpowiadająca za obsługę i renderowanie odpowiednich widoków na
 // podstawie parametrów w ścieżce zapytania.
 class MvcApplication
@@ -34,7 +38,8 @@ class MvcApplication
             }
 
             require_once Config::get('__MVC_CONTROLLERS_DIR') . $controller_with_extension;
-            $this->controller_instance = new $action_params['controller'];
+            $controller_class_name = Config::get('__MVC_CONTROLLERS_NAMESPACE') . $action_params['controller'];
+            $this->controller_instance = new $controller_class_name;
             
             if (!method_exists($this->controller_instance, $action_params['method']))
             {

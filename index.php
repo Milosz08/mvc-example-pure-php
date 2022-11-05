@@ -1,5 +1,8 @@
 <?php
 
+use App\Core\Config;
+use App\Core\MvcApplication;
+
 ob_start(); // włączenie buforowania
 session_start(); //uruchomienie sesji serwera php
 
@@ -17,6 +20,7 @@ Config::set('__MVC_CONTROLLER_SUFFIX', 'Controller');                           
 Config::set('__MVC_CONTROLLERS_DIR', Config::build_path(__DIR__, 'src', 'controllers'));            // ścieżka do klas kontrolerów
 Config::set('__MVC_VIEWS_DIR', Config::build_path(__DIR__, 'src', 'views'));                        // ścieżka do widoków aplikacji
 Config::set('__MVC_VIEWS_PARTIALS_DIR', Config::build_path(__DIR__, 'src', 'views', 'partials'));   // ścieżka do widoków częściowych aplikacji
+Config::set('__MVC_CONTROLLERS_NAMESPACE', 'App\Controllers\\');                                    // przestrzeń nazw dla kontrolerów
 
 Config::set('__DB_DSN', 'mysql:host=localhost;dbname=pdo');                                         // data source name do bazy danych
 Config::set('__DB_USERNAME', 'root');                                                               // nazwa użytkownika bazy danych

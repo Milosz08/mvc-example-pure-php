@@ -1,7 +1,13 @@
 <?php
 
-require_once './src/services/BooksService.php'; // import serwisu
+namespace App\Controllers;
 
+use App\Utils\Util;
+use App\Core\Config;
+use App\Core\Controller;
+use App\Services\BooksService;
+
+// Kontroler akcji dla widoków książek.
 class BooksController extends Controller
 {
     private const ADD_OP_PERFORMED = 'book_add_op_performed'; // wyzwalacz przesłania formularza dodającego nową książkę

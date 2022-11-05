@@ -1,8 +1,8 @@
 <?php
 
-/**
- * Serwis dla kontrolera AuthController odpowiadający za walidację.
- */
+namespace App\Services;
+
+// Serwis dla kontrolera AuthController odpowiadający za walidację.
 class AuthService
 {
     private $login_form_input = array('value' => '', 'error_message' => '');

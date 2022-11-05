@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+use PDO;
+
 // Główna klasa przechowująca obiekt PDO i podstawowe metody operujące na bazie danych.
 class DbContext
 {

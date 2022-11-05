@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 // Główna klasa abstrakcyjna kontrolerów. Każdy kontroler musi rozszerzać tą klasę.
 abstract class Controller
 {

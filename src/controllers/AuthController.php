@@ -1,6 +1,9 @@
 <?php
 
-require_once './src/services/AuthService.php'; // import serwisu
+namespace App\Controllers;
+
+use App\Core\Controller;
+use App\Services\AuthService;
 
 /**
  * Kontroler odpowiedzialny za akcję z logowaniem/wylogowywaniem użytkownika.

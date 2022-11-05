@@ -1,7 +1,13 @@
 <?php
 
-require_once './src/services/UsersService.php'; // import serwisu
+namespace App\Controllers;
 
+use App\Utils\Util;
+use App\Core\Config;
+use App\Core\Controller;
+use App\Services\UsersService;
+
+// Kontroler akcji dla widoków użytkowników.
 class UsersController extends Controller
 {
     private const ADD_OP_PERFORMED = 'user_add_op_performed'; // wyzwalacz przesłania formularza dodającego użytkownika

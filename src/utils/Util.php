@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Utils;
+
 // Klasa przechowująca statyczne metody pomocnicze do walidacji formularzy.
 class Util
 {
