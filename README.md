@@ -1,6 +1,6 @@
 # MVC Pattern in simple PHP application
-[![Generic badge](https://img.shields.io/badge/Made%20with-PHP%207.4-1abc9c.svg)](https://www.java.com/en/)&nbsp;&nbsp;
-[![Generic badge](https://img.shields.io/badge/MySQL%20version-7.4.30%20-brown.svg)](https://gradle.org/)&nbsp;&nbsp;
+[![Generic badge](https://img.shields.io/badge/Made%20with-PHP%207.4-1abc9c.svg)](https://www.php.net/)&nbsp;&nbsp;
+[![Generic badge](https://img.shields.io/badge/MySQL%20version-7.4.30%20-brown.svg)](https://www.mysql.com/)&nbsp;&nbsp;
 <br><br>
 Simple example of MVC application in pure PHP 7.4 with MySQL database and PDO wrapper.
 
