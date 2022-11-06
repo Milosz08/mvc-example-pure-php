@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="static/styles.css">
 </head> 
 <body>
-
     <?php include \App\Core\Config::get('__MVC_VIEWS_PARTIALS_DIR') . '_header_admin.partial.html' ?>
 
     <main class="app__content">
@@ -65,6 +64,5 @@
     </main>
 
     <?php include \App\Core\Config::get('__MVC_VIEWS_PARTIALS_DIR') . '_footer.partial.html' ?>
-
 </body>
 </html>

@@ -13,8 +13,41 @@
     <main class="app__content">
         <h1>Książki</h1>
 
-        <a href="index.php?action=books/edit&_bookid=4">Edytuj książkę</a>
-        <a href="index.php?action=books/rented&_userid=4">Zobacz wypożyczenia</a>
+        <div class="table-with-banner__container">
+            <div id="banner-container" class="app__banner app__banner--info <?= $data['banner_active_class'] ?>">
+                <?= $data['banner_text'] ?>
+                <button id="close-banner-button" class="banner__close-button">x</button>
+            </div>
+            <?php if ($data['books_data']) { ?>
+                <table class="app__table">
+                    <tr>
+                        <th class="cell--lp">Lp.</th>
+                        <th>Tytuł</th>
+                        <th>Autorzy</th>
+                        <th>Liczba egzemplarzy</th>
+                        <th>Akcja</th>
+                    </tr>
+                    <?php for ($i = 0; $i < $data['books_count']; $i++) { ?>
+                        <tr>
+                            <td class="cell--lp"><?= $i + 1 ?></td>
+                            <td><?= $data['books_data'][$i]->get_title() ?></td>
+                            <td><?= $data['books_data'][$i]->get_authors() ?></td>
+                            <td><?= $data['books_data'][$i]->get_copies() ?></td>
+                            <td class="cell--center">
+                                <a class="button--default button__variant--normal"
+                                    href="index.php?action=books/rent&_bookid=<?= $data['books_data'][$i]->get_id() ?>">
+                                    Pożycz
+                                </a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            <?php } else { ?>
+                <div class="app__banner app__banner--inline app__banner--warn">
+                    Brak zapisanych książek w bibliotece. Kliknij <a href="index.php?action=books/add">tutaj</a> aby dodać pierwszą książkę.
+                </div>
+            <?php } ?>
+        </div>
     </main>
 
     <?php include \App\Core\Config::get('__MVC_VIEWS_PARTIALS_DIR') . '_footer.partial.html' ?>
