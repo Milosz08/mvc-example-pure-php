@@ -34,8 +34,7 @@ class DbContext
             // zapytanie wykonywane poprzez prep_statement w celu uniknięcia podatności na ataki SQL Injections, bo id jest
             // przechwytywane z adresu URL
             $prep_statement = $this->_db_handler->prepare($sql_query); // przygotuj zapytanie SQL
-            $prep_statement->bindValue('id_sant', (int) $id); // wstawienie wartości
-            $prep_statement->execute(); // wykonanie zapytania SQL
+            $prep_statement->execute(array('id_sant' => (int) $id)); // wykonanie zapytania SQL
             $cursor = $prep_statement; // przypisanie do kursora przygotowanego zapytania
         }
         else // jeśli przechwytywane są wszystkie rekordy
