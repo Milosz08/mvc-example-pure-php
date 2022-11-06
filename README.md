@@ -14,7 +14,7 @@ Simple example of MVC application in pure PHP 7.4 with MySQL database and PDO wr
 
 1. To install the program on your computer, use the command below (or use the build-in GIT system in your IDE environment):
 ```
-$ git clone https://github.com/Milosz08/SUoT_Mvc_Pattern_PHP
+$ git clone https://github.com/Milosz08/SUoT_MVC_Pattern_PHP
 ```
 2. To run the application you need an Apache server and a MySQL DBMS. Available using XAMPP/WAMP software or by default in UNIX environments.
 3. Before starting the application, import database using `pdo.sql` file located in the application's root directory.
