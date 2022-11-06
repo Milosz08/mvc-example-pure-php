@@ -7,7 +7,7 @@ ob_start(); // włączenie buforowania
 session_start(); //uruchomienie sesji serwera php
 
 // import i stworzenie głównej instancji aplikacji MVC
-require_once './src/bootstrapper.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'bootstrapper.php';
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 

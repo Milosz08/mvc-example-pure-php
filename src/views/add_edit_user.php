@@ -18,7 +18,7 @@
             <label class="form__label" for="form__first-name-input">imię</label>
             <div class="input-with-text__container">
                 <input
-                    class="form__input" id="form__first-name-input" type="text" name="first_name"
+                    class="form__input" id="form__first-name-input" type="text" name="first_name" maxlength="30"
                     value="<?= $data['form_data']['first_name']['value'] ?>"/>
                 <div class='form__error'><?= $data['form_data']['first_name']['error_message'] ?></div>
             </div>
@@ -26,7 +26,7 @@
             <label class="form__label" for="form__last-name-input">nazwisko</label>
             <div class="input-with-text__container">
                 <input
-                    class="form__input" id="form__last-name-input" type="text" name="last_name"
+                    class="form__input" id="form__last-name-input" type="text" name="last_name"  maxlength="30"
                     value="<?= $data['form_data']['last_name']['value'] ?>"/>
                 <div class='form__error'><?= $data['form_data']['last_name']['error_message'] ?></div>
             </div>
@@ -34,7 +34,7 @@
             <label class="form__label" for="form__login-input">login</label>
             <div class="input-with-text__container">
                 <input
-                    class="form__input" id="form__login-input" type="text" name="login"
+                    class="form__input" id="form__login-input" type="text" name="login"  maxlength="20"
                     value="<?= $data['form_data']['login']['value'] ?>"/>
                 <div class='form__error'><?= $data['form_data']['login']['error_message'] ?></div>
             </div>
@@ -47,14 +47,14 @@
                 <div class='form__error'><?= $data['form_data']['age']['error_message'] ?></div>
             </div>
 
-            <label class="form__label" for="form__permission-select">uprawnienia</label>
+            <label class="form__label" for="form__role-select">uprawnienia</label>
             <div class="input-with-text__container">
                 <select
-                    class="form__input" id="form__permission-select" name="permission"
-                    value="<?= $data['form_data']['permission']['value'] ?>">
+                    class="form__input" id="form__role-select" name="role"
+                    value="<?= $data['form_data']['role']['value'] ?>">
                     <?= $data['permissions'] ?>
                 </select>
-                <div class='form__error'><?= $data['form_data']['permission']['error_message'] ?></div>
+                <div class='form__error'><?= $data['form_data']['role']['error_message'] ?></div>
             </div>
 
             <div></div>
