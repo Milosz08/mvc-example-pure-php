@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logowanie | SI Lab 4</title>
     <link rel="stylesheet" href="static/styles.css">
+    <script defer src="static/scripts.js"></script>
 </head>
 <body>
     <?php include \App\Core\Config::get('__MVC_VIEWS_PARTIALS_DIR') . '_header_not_logged.partial.html' ?>
