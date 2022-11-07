@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use Exception;
+use LogicException;
 
 // Główna klasa aplikacji odpowiadająca za obsługę i renderowanie odpowiednich widoków na
 // podstawie parametrów w ścieżce zapytania.
@@ -34,7 +34,7 @@ class MvcApplication
         
             if (!file_exists(Config::get('__MVC_CONTROLLERS_DIR') . $controller_with_extension))
             {
-                throw new Exception();
+                throw new LogicException();
             }
 
             require_once Config::get('__MVC_CONTROLLERS_DIR') . $controller_with_extension;
@@ -43,11 +43,11 @@ class MvcApplication
             
             if (!method_exists($this->controller_instance, $action_params['method']))
             {
-                throw new Exception();
+                throw new LogicException();
             }
             call_user_func([ $this->controller_instance, $action_params['method'] ]);
         }
-        catch(Exception $e)
+        catch(LogicException $e)
         {
             $this->renderer_instance->render('_not-found');
             die;
