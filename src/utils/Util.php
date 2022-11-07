@@ -105,4 +105,32 @@ class Util
         }
         return false; // w przeciwnym wypadku wszystko OK i zwróć false
     }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    // Metoda wypełniająca wszystkie elementy tablicy zwykłej z pól formularzy tablicą asocjacyjną z wartością pola i wiadomością błędu.
+    public static function fill_form_assoc(& $inputs_array) // przekazanie tablicy przez referencję
+    {
+        return array_fill_keys($inputs_array, array('value' => '', 'error_message' => ''));
+    }
+    
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    // Metoda przekierowująca użytkownika na stronę z logowaniem, jeśli nie jest zalogowany. Przyjmuje wiele argumentów jako wartości
+    // parametrów configu z rolami. Tylko użytkownicy z przekazanymi rolami będą mogli wejść na stronę, w przeciwnym wypadku przekierowanie.
+    public static function redirect_when_not_logged(...$roles_array)
+    {
+        if (count($roles_array) === 0) // jeśli nie zostaną przekazane żadne parametry, przypisz wszystkie role
+        {
+            $roles_array = array('__ADMIN_ROLE', '__USER_ROLE');
+        }
+        function mapped_to_roles($role) { return Config::get($role); }
+        $roles_config_array = array_map(mapped_to_roles::class, $roles_array);
+        // jeśli użytkownik nie jest zalogowany z podaną rolą w parametrze, przekieruj do formularza logowania
+        if ($_SESSION['logged_user'] == null || !in_array($_SESSION['logged_user']['user_role'], $roles_config_array))
+        {
+            header('Location:index.php?action=auth/login'); // przekierowanie na adres
+            ob_end_flush(); // zwolnienie bufora
+        }
+    }
 }

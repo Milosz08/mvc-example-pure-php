@@ -6,7 +6,9 @@ use App\Core\Config;
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
-Config::set('__ROLES', array('czytelnik', 'administrator'));                                        // tablica ról użytkowników aplikacji
+Config::set('__ADMIN_ROLE', 'administrator');                                                       // rola administratora
+Config::set('__USER_ROLE', 'czytelnik');                                                            // rola czytelnika (zwykły użytkownik)
+Config::set('__ROLES', array(Config::get('__USER_ROLE'), Config::get('__ADMIN_ROLE')));             // tablica ról użytkowników aplikacji
 Config::set('__SELF_SANITIZED', filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_URL));             // zmienna wskazująca na aktualny adres
 
 Config::set('__MVC_DEF_METHOD', 'index');                                                           // domyślna metoda kontrolera (w przypadku braku parametrów)
