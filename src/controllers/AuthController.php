@@ -2,17 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Core\Config;
 use App\Core\Controller;
 use App\Services\AuthService;
 
-/**
- * Kontroler odpowiedzialny za akcję z logowaniem/wylogowywaniem użytkownika.
- */
+// Kontroler odpowiedzialny za akcję z logowaniem/wylogowywaniem użytkownika.
 class AuthController extends Controller
 {
-    private $_service; // zmienna dla instancji klasy serwisu
+    private const LOGIN_OP_PERFORMED = 'auth_login_op_performed'; // wyzwalacz przesłania formularza umożliwiającego zalogowanie
+    private $_service; // instancja serwisu
 
-    //------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------------
 
     public function __construct()
     {
@@ -20,78 +20,43 @@ class AuthController extends Controller
         $this->_service = new AuthService(); // stworzenie instancji serwisu
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------------------------
 
-    /**
-     * Endpoint pod akcją "index.php?action=auth". Tożsame z endpoitem "index.php?action=auth/login".
-     * Metoda umożliwia zalogowanie oraz sprawdzenie stanu aktywnej sesji użytkownika.
-     */
-    public function index()
-    {        
-        // jeśli przesłano dane w formularzu, przejdź do walidacji
-        if (isset($_POST['login']) && isset($_POST['password']))
-        {
-            $this->_service->validate_login_data();
-            
-        }
-        else // przekierowanie na stronę z grafiką w przypadku wejścia bez logowania
-        {
-            // przekierowanie w przypadku, gdy użytkownik jest już zalogowany
-        }
-        $this->renderer->render('login', array(
-            'self_redirect' => $this->get_redir_self_login_location(),
-            'form_data' => $this->_service->get_validation_data(),
-        ));
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Endpoint pod akcją "index.php?action=auth/logout" wylogowywujący użytkownika i niszczący sesję.
-     */
-    public function logout()
-    {
-        $this->_service->clear_validation_data();
-        $_SESSION['logged_user_details'] = null;
-        session_destroy();
-        $this->renderer->render('login', array(
-            'self_redirect' => $this->get_redir_self_login_location(),
-            'form_data' => $this->_service->get_validation_data(),
-        ));
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Metoda pośrednicząca (dla endpointu "index.php?action=auth/login").
-     * Równoznaczna z endpointem "index.php?action=auth".
-     */
+    // Metoda umożliwiająca zalogowanie użytkownika. Na podstawie danych, tworzy obiekt sesji i przekierowuje do zabezpieczonych sekcji.
+    // Alias dla endpointu index.php?action=auth/login. Równoznaczny z endpointem index.php?action=auth.
     public function login()
     {
-        $this->index();
-    }
-    
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Metoda zwracająca adres URL na podstawie aktualnej ścieżki serwera i parametru auth/login.
-     */
-    private function get_redir_self_login_location()
-    {
-        return filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_URL) . '?action=auth/login';
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Metoda przekierowująca do strony zdjęcia w momencie gdy użytkownik jest już zalogowany
-     */
-    private function redirect_when_logged()
-    {
-        if (isset($_SESSION['logged_user_details']))
+        $this->_service->redirect_only_for_logged(); // przekierowanie w przypadku, gdy użytkownik jest już zalogowany, jeśli nie pozostanie na stronie
+        if (isset($_POST[self::LOGIN_OP_PERFORMED])) // jeśli przesłano dane w formularzu, przejdź do walidacji
         {
-            header('Location:index.php?action=gfx'); // przekierowanie
-            ob_end_flush(); // wyłączenie buforowania
+            $this->_service->login_user(); // zaloguj użytkownika i przejdź na adres chronionego zasobu
         }
+        $this->renderer->render('login', array(
+            'self_redirect' => Config::get('__SELF_SANITIZED') . '?action=auth/login',
+            'op_performed' => self::LOGIN_OP_PERFORMED,
+            'form_data' => $this->_service->get_form_validatior_auth(),
+            'banner_text' => $this->_service->get_banner_text(),
+            'banner_active_class' => !empty($this->_service->get_banner_text()) ? 'app__banner--enabled' : '',
+        ));
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    // Metoda umożliwiająca wylogowanie użytkownika i niszcząca sesję.
+    // Alias dla endpointu index.php?action=auth/logout.
+    public function logout()
+    {
+        $_SESSION['logged_user'] = null; // zniszcz sesję
+        $this->index(); // przekieruj na adres poprzez metodę pośredniczącą
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    // Metoda umożliwiająca zalogowanie użytkownika. Na podstawie danych, tworzy obiekt sesji i przekierowuje do zabezpieczonych sekcji.
+    // Alias dla endpointu index.php?action=auth. Równoznaczny z endpointem index.php?action=auth/login.
+    public function index()
+    {
+        header('Location:index.php?action=auth/login'); // przekierowanie na adres
+        ob_end_flush(); // zwolnienie bufora
     }
 }

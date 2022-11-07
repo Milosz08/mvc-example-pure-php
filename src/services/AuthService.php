@@ -2,103 +2,95 @@
 
 namespace App\Services;
 
+use Exception;
+use App\Utils\Util;
+use App\Core\Config;
+use App\Core\Service;
+use App\Models\LoginUserModel;
+
 // Serwis dla kontrolera AuthController odpowiadający za walidację.
-class AuthService
+class AuthService extends Service
 {
-    private $login_form_input = array('value' => '', 'error_message' => '');
-    private $password_form_input = array('value' => '', 'error_message' => '');
+    private $_form_data = array('login', 'password');
 
-    /**
-     * Metoda zwracająca wartość true/false, jeśli wszystkie pola w formularzu logowania są poprawne.
-     */
-    public function form_data_is_correct()
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    public function __construct()
     {
-        return empty($this->login_form_input['error_message']) && empty($this->password_form_input['error_message']);
+        parent::__construct(); // wywołanie konstruktora klasy nadrzędnej
+        // automatyczne wypełnienie każdego pola dodatkową tablicą przechowującą poprzednią wartość i wiadomość błędu
+        $this->_form_data = Util::fill_form_assoc($this->_form_data);
     }
 
-    /**
-     * Metoda walidująca wszystkie pola formularza logowania
-     */
-    public function validate_login_data()
-    {
-        $this->login_form_input = $this->validate_simple_form_input('login', 'user');
-        $this->password_form_input = $this->validate_simple_form_input('password', 'pass');
-    }
+    //--------------------------------------------------------------------------------------------------------------------------------------
 
-    /**
-     * Metoda zwracająca dane walidacji formularza logowania.
-     */
-    public function get_validation_data()
+    // Metoda umożliwiająca zalogowanie użytkownia. Sprawdza, czy użytkownik istnieje, jeśli nie przekazuje błąd do kontrolera.
+    // Jeśli natomiast użytkownik istnienie, zapisu nowy obiekt w sesji i przenosi do chronionych zasobów serwera.
+    public function login_user()
     {
-        return array(
-            'login' => $this->login_form_input,
-            'password' => $this->password_form_input,
+        $this->_form_data['login'] = Util::validate_regex_field('login', '/^[a-z0-9]{2,20}$/'); // sprawdź, czy login jest poprawny
+        $this->_form_data['password'] = Util::check_if_input_not_empty('password'); // sprawdź, czy hasło nie jest puste
+        if (Util::check_if_form_is_invalid($this->_form_data)) return; //sprawdź, czy formularz zawiera błędy, jeśli tak wyjdź z metody
+        try
+        {
+            // zapytanie pobierające użytkownika na podstawie loginu oraz zahaszowanego hasła
+            $query = "
+                SELECT users.id, `login`, roles.name AS `user_role`, CONCAT(first_name, ' ', last_name) AS `full_name`
+                FROM users INNER JOIN roles ON users.role_id = roles.id
+                WHERE `login` = ? AND `password` = ?
+            ";
+            $statement = $this->_dbh->prepare($query); // przygotuj zapytanie
+            $statement->execute(array( // wykonanie zapytania SQL
+                $this->_form_data['login']['value'],
+                sha1(Config::get('__SHA1_SALT') . $this->_form_data['login']['value']), // zahaszuj hasło przy użyciu soli
+            ));
+
+            $find_user = $statement->fetchObject(LoginUserModel::class); // zmapuj otrzymane dane na obiekt
+            // jeśli nie znajdzie rzuć wyjątek
+            if (empty($find_user)) throw new Exception();
+            $statement->closeCursor(); // zwolnij zasoby
+        }
+        catch (Exception $e)
+        {
+            $this->_banner_text = 'Nieprawidłowy login i/lub hasło. Spróbuj ponownie wprowadzając inne dane.';
+            $statement->closeCursor(); // zwolnij zasoby
+            return; // wyjście z metody
+        }
+        // jeśli znajdzie użytkownika, przejdź do procedury zapisywania stanu sesji i przejścia do chronionych zasobów serwera
+        $_SESSION['logged_user'] = array(  // przypisz użytkownika do sesji serwera
+            'user_id' => $find_user->get_id(),
+            'user_role' => $find_user->get_user_role(),
+            'full_name' => $find_user->get_full_name(),
         );
+        // jeśli użytkownik jest zalogowany, przekieruj do sekcji dla odpowiedniej roli
+        $redir_location = $_SESSION['logged_user']['user_role'] == Config::get('__ADMIN_ROLE') ? 'users' : 'books';
+        header('Location:index.php?action=' . $redir_location . '/show'); // przekierowanie na adres
+        ob_end_flush(); // zwolnienie bufora
     }
 
-    /**
-     * Metoda odpowiedzialna za czyszczenie pól walidacji formularza logowania.
-     */
-    public function clear_validation_data()
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    // Metoda sprawdzająca, czy użytkownik jest zalogowany z jakąś rangą. Jeśli tak, przekierowanie na wybraną stronę.
+    public function redirect_only_for_logged()
     {
-        $this->login_form_input = array('value' => '', 'error_message' => '');
-        $this->password_form_input = array('value' => '', 'error_message' => '');
+        if ($_SESSION['logged_user'] == null) return; // jeśli użytkownik nie jest zalogowany, nie wykonuj przekierowań
+        // jeśli użytkownik jest zalogowany z rolą administratora, przekieruj do sekcji dla administratora
+        if ($_SESSION['logged_user']['user_role'] == Config::get('__ADMIN_ROLE'))
+        {
+            header('Location:index.php?action=users/show'); // przekierowanie na adres
+            ob_end_flush(); // zwolnienie bufora
+        }
+        // jeśli użytkownik jest zalogowany z rolą czytelnika (użytkownika) przekieruj do sekcji dla czytelników
+        if ($_SESSION['logged_user']['user_role'] == Config::get('__USER_ROLE'))
+        {
+            header('Location:index.php?action=books/show'); // przekierowanie na adres
+            ob_end_flush(); // zwolnienie bufora
+        }
     }
 
-    /**
-     * Metoda do walidacji inputu tekstowego na podstawie preferowanej wartości.
-     */
-    private function validate_simple_form_input($input_name, $preferred_value)
+    // Metoda zwracająca elementy formularza jako tablicę wartości i wiadomości błędów
+    public function get_form_validatior_auth()
     {
-        $error_message = '';
-        $sanitized_value = htmlspecialchars($_POST[$input_name]); // sanetyzacja pola przeciwko atakom XSS
-        if (empty($sanitized_value)) // jeśli wartość jest pusta, error
-        {
-            $error_message = '* ' . ucfirst($input_name) . ' cannot be empty.';
-        }
-        else if ($sanitized_value != $preferred_value) // jeśli wartość jest inna niż preferowana, error
-        {
-            $error_message = '* Incorrect ' . $input_name . '.';
-        }
-        // zwróć tablicę asocjacyjną z informacjami po weryfikacji pola formularza
-        return array(
-            'value' => $sanitized_value,
-            'error_message' => $error_message
-        );
-    }
-
-    /**
-     * Metoda walidująca dla inputu liczbowego przyjmująca nazwę inputu oraz zakres od
-     * do którego ma walidować (zakres ten jest obustronnie otwarty).
-     */
-    private function validate_numer_form_input($input_name, $from_incl, $to_incl)
-    {
-        $error_message = '';
-        // sanetyzacja pola przeciwko atakom XSS oraz filtrowanie wartości (filtr sanetyzujący liczby)
-        $sanitized_value = filter_var($_POST[$input_name], FILTER_SANITIZE_NUMBER_INT);
-        if (empty($_POST[$input_name])) // jeśli wartość jest pusta, error
-        {
-            $error_message = '* ' . ucfirst($input_name) . ' cannot be empty.';
-        }
-        else
-        {
-            if (is_numeric($sanitized_value)) // jeśli wartość jest liczbą, sprawdź czy mieści się w przedziale
-            {
-                $parsed_value = (int) $sanitized_value;
-                if ($parsed_value <= $from_incl || $parsed_value >= $to_incl) // jeśli nie mieści się w przedziale, error
-                {
-                    $error_message = '* ' . ucfirst($input_name) . ' must be between ' . $from_incl . ' to ' . $to_incl . '.';
-                }
-            }
-            else // jeśli nie jest liczbą, error
-            {
-                $error_message = '* ' . ucfirst($input_name) . ' must be number.';
-            }
-        }
-        // zwróć tablicę asocjacyjną z informacjami po weryfikacji pola formularza
-        return array(
-            'value' => $sanitized_value,
-            'error_message' => $error_message
-        );
+        return $this->_form_data;
     }
 }
