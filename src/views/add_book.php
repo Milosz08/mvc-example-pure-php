@@ -18,7 +18,7 @@
                 <?= $data['banner_text'] ?>
                 <button id="close-banner-button" class="banner__close-button">x</button>
             </div>
-            <form method="POST" action="<?= $data['self_redirect'] ?>" class="content__form__container" novalidate>
+            <form method="POST" action="<?= $data['self_redirect'] ?>" class="content__form__container form--no-margin" novalidate>
     
                 <label class="form__label" for="form__title-input">tytuł książki</label>
                 <div class="input-with-text__container">

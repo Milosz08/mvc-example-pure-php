@@ -9,13 +9,13 @@
     <script defer src="static/scripts.js"></script>
 </head>
 <body>
-    <?php include \App\Core\Config::get('__MVC_VIEWS_PARTIALS_DIR') . '_header_admin.partial.html' ?>
+    <?php include \App\Core\Config::get('__MVC_VIEWS_PARTIALS_DIR') . '_header_' . $data['header_mode'] . '.partial.html' ?>
 
     <main class="app__content">
         <h1>Książki</h1>
 
         <div class="table-with-banner__container">
-            <div id="banner-container" class="app__banner app__banner--info <?= $data['banner_active_class'] ?>">
+            <div id="banner-container" class="app__banner <?= $data['banner_active_class'] . ' ' . $data['banner_mode_class'] ?>">
                 <?= $data['banner_text'] ?>
                 <button id="close-banner-button" class="banner__close-button">x</button>
             </div>

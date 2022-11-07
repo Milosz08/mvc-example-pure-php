@@ -13,6 +13,7 @@ require_once 'utils' . DIRECTORY_SEPARATOR . 'Util.php';
 
 require_once 'models' . DIRECTORY_SEPARATOR . 'BookModel.php';
 require_once 'models' . DIRECTORY_SEPARATOR . 'UserModel.php';
+require_once 'models' . DIRECTORY_SEPARATOR . 'LoginUserModel.php';
 
 require_once 'services' . DIRECTORY_SEPARATOR . 'AuthService.php';
 require_once 'services' . DIRECTORY_SEPARATOR . 'BooksService.php';

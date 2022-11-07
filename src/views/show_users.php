@@ -15,7 +15,7 @@
         <h1>Użytkownicy</h1>
 
         <div class="table-with-banner__container">
-            <div id="banner-container" class="app__banner app__banner--info <?= $data['banner_active_class'] ?>">
+            <div id="banner-container" class="app__banner <?= $data['banner_active_class'] . ' ' . $data['banner_mode_class'] ?>">
                 <?= $data['banner_text'] ?>
                 <button id="close-banner-button" class="banner__close-button">x</button>
             </div>
@@ -40,16 +40,16 @@
                             <td><?= $data['users_data'][$i]->get_role_name() ?></td>
                             <td class="cell--center">
                                 <a class="button--default button__variant--normal"
+                                    href="index.php?action=books/rents&_userid=<?= $data['users_data'][$i]->get_id() ?>">
+                                    Książki
+                                </a>
+                                <a class="button--default button__variant--normal button__variant--table"
                                     href="index.php?action=users/edit&_userid=<?= $data['users_data'][$i]->get_id() ?>">
                                     Edytuj
                                 </a>
-                                <a class="button--default button__variant--error button__variant--center"
+                                <a class="button--default button__variant--error"
                                     href="index.php?action=users/remove&_userid=<?= $data['users_data'][$i]->get_id() ?>">
                                     Usuń
-                                </a>
-                                <a class="button--default button__variant--normal"
-                                    href="index.php?action=users/books&_userid=<?= $data['users_data'][$i]->get_id() ?>">
-                                    Książki
                                 </a>
                             </td>
                         </tr>
