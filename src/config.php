@@ -23,3 +23,5 @@ Config::set('__DB_DSN', 'mysql:host=localhost;dbname=pdo');                     
 Config::set('__DB_USERNAME', 'root');                                                               // nazwa użytkownika bazy danych
 Config::set('__DB_PASSWORD', '');                                                                   // nazwa użytkownika bazy danych
 Config::set('__DB_INIT_COMMANDS', array(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "UTF8"'));         // wymuszenie kodowania znaków UTF-8
+
+Config::set('__SHA1_SALT', 'oj0SMXz7i9sDK0JAw0ZgKRtDYek5hMVj3VEbiGgt1ISJ2ZGfvqATWtT0Dlkaw7Qlv6n');  // sól do algorytmu haszującego hasła
