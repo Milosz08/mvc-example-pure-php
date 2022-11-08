@@ -18,7 +18,39 @@
                 <?= $data['banner_text'] ?>
                 <button id="close-banner-button" class="banner__close-button">x</button>
             </div>
-            <?php var_dump($data['is_self_user']) ?>
+            <?php if ($data['rented_books_data']) { ?>
+                <table class="app__table">
+                    <tr>
+                        <th class="cell--lp">Lp.</th>
+                        <th>Tytuł</th>
+                        <th>Autorzy</th>
+                        <th>Liczba egzemplarzy</th>
+                        <?php if ($data['is_self_user']) { ?>
+                            <th>Akcja</th>
+                        <?php } ?>
+                    </tr>
+                    <?php for ($i = 0; $i < count($data['rented_books_data']); $i++) { ?>
+                        <tr>
+                            <td class="cell--lp"><?= $i + 1 ?></td>
+                            <td><?= $data['rented_books_data'][$i]->get_title() ?></td>
+                            <td><?= $data['rented_books_data'][$i]->get_authors() ?></td>
+                            <td><?= $data['rented_books_data'][$i]->get_rented_count() ?></td>
+                            <?php if ($data['is_self_user']) { ?>
+                                <td class="cell--center">
+                                    <a class="button--default button__variant--normal"
+                                        href="index.php?action=books/refund&_bookid=<?= $data['rented_books_data'][$i]->get_id() ?>">
+                                        Oddaj
+                                    </a>
+                                </td>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>        
+                </table>
+            <?php } else { ?>
+                <div class="app__banner app__banner--inline app__banner--warn">
+                    Brak wypożyczonych książek. Kliknij <a href="index.php?action=books/show">tutaj</a> aby wypożyczyć książkę.
+                </div>
+            <?php } ?>
         </div>
     </main>
 
