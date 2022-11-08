@@ -37,9 +37,6 @@ class CoreLoader
     // wyniku tego załadowanie do kontekstu aplikacji plików.
     public static function load()
     {
-        if (self::$_instance == null)
-        {
-            new CoreLoader();
-        }
+        if (self::$_instance == null) self::$_instance = new CoreLoader();
     }
 }

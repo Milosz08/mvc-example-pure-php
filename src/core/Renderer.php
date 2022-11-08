@@ -26,10 +26,7 @@ class Renderer
     // stworzenie (jeśli obiekt nie istnieje) oraz zwrócenie instancji klasy Renderer
     public static function get_instance()
     {
-        if (self::$_instance == null)
-        {
-            self::$_instance = new Renderer();
-        }
+        if (self::$_instance == null) self::$_instance = new Renderer();
         return self::$_instance;
     }
 }

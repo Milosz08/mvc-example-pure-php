@@ -97,10 +97,7 @@ class DbContext
     // stworzenie (jeśli obiekt nie istnieje) oraz zwrócenie instancji PDO
     public static function get_instance()
     {
-        if (self::$_instance == null)
-        {
-            self::$_instance = new DbContext();
-        }
+        if (self::$_instance == null) self::$_instance = new DbContext();
         return self::$_instance;
     }
 }

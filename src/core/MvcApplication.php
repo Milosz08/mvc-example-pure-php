@@ -94,9 +94,6 @@ class MvcApplication
     // główna metoda uruchamiająca aplikację poprzez stworzenie instancji klasy MvcApplication
     public static function run()
     {
-        if (self::$_instance == null)
-        {
-            self::$_instance = new MvcApplication();
-        }
+        if (self::$_instance == null) self::$_instance = new MvcApplication();
     }
 }
