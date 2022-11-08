@@ -23,7 +23,7 @@
                 <label class="form__label" for="form__title-input">tytuł książki</label>
                 <div class="input-with-text__container">
                     <input
-                        class="form__input" id="form__title-input" type="text" name="title" maxlength="30"
+                        class="form__input" id="form__title-input" type="text" name="title" maxlength="255"
                         value="<?= $data['form_data']['title']['value'] ?>"/>
                     <div class='form__error'><?= $data['form_data']['title']['error_message'] ?></div>
                 </div>
@@ -31,7 +31,7 @@
                 <label class="form__label" for="form__authors-input">autorzy</label>
                 <div class="input-with-text__container">
                     <input
-                        class="form__input" id="form__authors-input" type="text" name="authors" maxlength="100"
+                        class="form__input" id="form__authors-input" type="text" name="authors" maxlength="255"
                         value="<?= $data['form_data']['authors']['value'] ?>"/>
                     <div class='form__error'><?= $data['form_data']['authors']['error_message'] ?></div>
                 </div>

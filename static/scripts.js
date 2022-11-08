@@ -5,3 +5,5 @@ const bannerContainer = document.getElementById('banner-container'); // uchwyt d
 closeBannerButton.addEventListener('click', function() {
     bannerContainer.classList.remove('app__banner--enabled');
 });
+
+setTimeout(function() { bannerContainer.classList.remove('app__banner--enabled'); }, 3000);

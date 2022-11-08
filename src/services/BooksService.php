@@ -89,11 +89,19 @@ class BooksService extends Service
         {
             $this->_dbh->beginTransaction(); // rozpoczęcie transakcji
             // sprawdź, czy nie następuje próba pożyczenia książki, których ilość wynosi 0 (tylko dla wypożyczenia)
-            if ($existing_book->get_copies() == 0 && $is_rent) throw new Exception('Brak książek na stanie możliwych do wypożyczenia.'); 
+            if ($existing_book->get_copies() == 0 && $is_rent) throw new Exception('Brak książek na stanie możliwych do wypożyczenia.');
+
+            if (!$is_rent) // sprawdź, czy uytkownik odwołuje sie do id książki która istnieje (jest wypożyczona i można ją zwrócić)
+            {
+                $statement = $this->_dbh->prepare("SELECT COUNT(*) FROM books_users_binding WHERE book_id = ? AND user_id = ?"); // przygotuj zapytanie
+                $statement->execute(array($existing_book->get_id(), $_SESSION['logged_user']['user_id'])); // wykonaj zapytanie
+                if (empty($statement->fetch(PDO::FETCH_NUM)[0])) throw new Exception("Wybrana książka została już oddana lub nie została wypożyczona.");
+            }
             
             // przygotuj zapytanie wstawiające/usuwające id użytkownika i książki do/z tabeli łączonej
             $statement = $this->_dbh->prepare($first_query);
             $add_status = $statement->execute(array($_SESSION['logged_user']['user_id'], $existing_book->get_id())); // wykonanie komendy
+            
             // jeśli nie uda się zmienić danych książki do tabeli łączonej, wyrzuć wyjątek
             if (!$add_status) throw new Exception('Nieudane ' . $mode_descr_first . ' książki. Spróbuj ponownie.');
            
@@ -103,7 +111,7 @@ class BooksService extends Service
             // jeśli nie uda się zdekrementować ilości książek, wyrzuć wyjątek
             if (!$update_status) throw new Exception('Nieudane ' . $mode_descr_first . ' książki. Spróbuj ponownie.');
 
-            // wyświetl komunikat o poprawnym wypożyczeniu książki
+            // wyświetl komunikat o poprawnym wypoyczeniu/oddaniu książki
             $this->_banner_text = 'Książka "' . $existing_book->get_title() . '" została ' . $mode_descr_second . ' przez użytkownika "' . 
                                    $_SESSION['logged_user']['full_name'] . '".';
             $this->_banner_error = false;
