@@ -11,6 +11,15 @@ class DbContext
     private static $_instance;  // instancja klasy singleton
     private $_db_handler; // instancja PDO
 
+    // struktura zapytania do pobierania wartości użytkownika (tabela i aktualizowanie danych użytkownika)
+    public const GET_USER_QUERY = "
+        SELECT users.id AS id, `first_name`, `last_name`, `login`, `age`, roles.name AS `role_name`, roles.id AS `role_id`,
+        CONCAT(`first_name`, ' ', `last_name`) AS `full_name`
+        FROM users
+        INNER JOIN roles ON users.role_id = roles.id
+        WHERE users.id = :id_sant
+    ";
+
     //--------------------------------------------------------------------------------------------------------------------------------------
 
     private function __construct()
@@ -63,9 +72,10 @@ class DbContext
 
     // Metoda sprawdzająca, czy element istnieje w bazie danych (przekazywany poprzez $_GET). Jeśli istnieje, zwróć element. W przeciwnym
     // wypadku przekieruj do wybranego kontrolera na wybraną akcję.
-    public function check_if_exist($sql_query, $model_clazz, $param_name, $redirect_controller, $redirect_action)
+    public function check_if_exist($sql_query, $model_clazz, $param_name_or_id, $redirect_controller, $redirect_action)
     {
-        $id = $_GET['_' . $param_name . 'id']; // pobierz parametr z tablicy $_POST
+        if (is_numeric($param_name_or_id)) $id = $param_name_or_id; // sprawdź, czy nie wysłano bezpośrednio id jako liczby
+        else $id = $_GET['_' . $param_name_or_id . 'id']; // pobierz parametr z tablicy $_POST
         if (isset($id) && is_numeric($id)) // jeśli parametr nie jest nullem i jest liczbą
         {
             $result = $this->get_data_from_db($sql_query, $model_clazz, $id); // wykonaj zapytanie i zwróć dane

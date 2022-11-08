@@ -12,6 +12,7 @@ class UserModel
     protected $age; // wiek
     protected $role_id; // id roli
     protected $role_name; // klucz obcy do roli
+    protected $full_name; // pełna nazwa użytkownika (imię i nazwisko)
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -43,5 +44,10 @@ class UserModel
     public function get_role_name()
     {
         return $this->role_name;
+    }
+
+    public function get_full_name()
+    {
+        return $this->full_name;
     }
 }

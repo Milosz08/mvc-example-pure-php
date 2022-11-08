@@ -17,7 +17,7 @@ class AuthController extends Controller
     public function __construct()
     {
         parent::__construct(); // wywołanie konstruktora klasy rodzica (klasa abstrakcyjna Controller)
-        $this->_service = new AuthService(); // stworzenie instancji serwisu
+        $this->_service = AuthService::get_instance(); // pobranie obiektu typu singleton z serwisu
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -46,7 +46,8 @@ class AuthController extends Controller
     // Alias dla endpointu index.php?action=auth/logout.
     public function logout()
     {
-        $_SESSION['logged_user'] = null; // zniszcz sesję
+        $_SESSION['logged_user'] = null; // usuń dane użytkownika
+        session_destroy(); // zniszcz sesję
         $this->index(); // przekieruj na adres poprzez metodę pośredniczącą
     }
 

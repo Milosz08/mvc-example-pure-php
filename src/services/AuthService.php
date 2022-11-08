@@ -11,11 +11,12 @@ use App\Models\LoginUserModel;
 // Serwis dla kontrolera AuthController odpowiadający za walidację.
 class AuthService extends Service
 {
-    private $_form_data = array('login', 'password');
+    private static $_instance; // instancja klasy na podstawie wzorca singleton
+    private $_form_data = array('login', 'password'); // tablica wartości z formularza logowania
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
-    public function __construct()
+    protected function __construct()
     {
         parent::__construct(); // wywołanie konstruktora klasy nadrzędnej
         // automatyczne wypełnienie każdego pola dodatkową tablicą przechowującą poprzednią wartość i wiadomość błędu
@@ -48,24 +49,26 @@ class AuthService extends Service
             $find_user = $statement->fetchObject(LoginUserModel::class); // zmapuj otrzymane dane na obiekt
             // jeśli nie znajdzie rzuć wyjątek
             if (empty($find_user)) throw new Exception();
-            $statement->closeCursor(); // zwolnij zasoby
+        
+            // jeśli znajdzie użytkownika, przejdź do procedury zapisywania stanu sesji i przejścia do chronionych zasobów serwera
+            $_SESSION['logged_user'] = array(  // przypisz użytkownika do sesji serwera
+                'user_id' => $find_user->get_id(),
+                'user_role' => $find_user->get_user_role(),
+                'full_name' => $find_user->get_full_name(),
+            );
+            // jeśli użytkownik jest zalogowany, przekieruj do sekcji dla odpowiedniej roli
+            $redir_location = $_SESSION['logged_user']['user_role'] == Config::get('__ADMIN_ROLE') ? 'users' : 'books';
+            header('Location:index.php?action=' . $redir_location . '/show'); // przekierowanie na adres
+            ob_end_flush(); // zwolnienie bufora
         }
         catch (Exception $e)
         {
             $this->_banner_text = 'Nieprawidłowy login i/lub hasło. Spróbuj ponownie wprowadzając inne dane.';
-            $statement->closeCursor(); // zwolnij zasoby
-            return; // wyjście z metody
         }
-        // jeśli znajdzie użytkownika, przejdź do procedury zapisywania stanu sesji i przejścia do chronionych zasobów serwera
-        $_SESSION['logged_user'] = array(  // przypisz użytkownika do sesji serwera
-            'user_id' => $find_user->get_id(),
-            'user_role' => $find_user->get_user_role(),
-            'full_name' => $find_user->get_full_name(),
-        );
-        // jeśli użytkownik jest zalogowany, przekieruj do sekcji dla odpowiedniej roli
-        $redir_location = $_SESSION['logged_user']['user_role'] == Config::get('__ADMIN_ROLE') ? 'users' : 'books';
-        header('Location:index.php?action=' . $redir_location . '/show'); // przekierowanie na adres
-        ob_end_flush(); // zwolnienie bufora
+        finally // wykonaj niezależnie, czy został przechwycony wyjątek czy nie
+        {
+            $statement->closeCursor(); // zwolnij zasoby
+        }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -88,9 +91,20 @@ class AuthService extends Service
         }
     }
 
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
     // Metoda zwracająca elementy formularza jako tablicę wartości i wiadomości błędów
     public function get_form_validatior_auth()
     {
         return $this->_form_data;
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------
+
+    // Instantancja obiektu typu singleton
+    public static function get_instance()
+    {
+        if (self::$_instance == null) self::$_instance = new AuthService();
+        return self::$_instance;
     }
 }

@@ -39,6 +39,6 @@ class Config
     // Metoda umożliwiająca stworzenie ścieżki z systemowymi separatorami katalogów (co 1 segment)
     public static function build_path(...$segments)
     {
-        return join(DIRECTORY_SEPARATOR, $segments) . DIRECTORY_SEPARATOR;
+        return join(__SEP__, $segments) . __SEP__;
     }
 }

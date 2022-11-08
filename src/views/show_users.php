@@ -13,7 +13,6 @@
 
     <main class="app__content">
         <h1>Użytkownicy</h1>
-
         <div class="table-with-banner__container">
             <div id="banner-container" class="app__banner <?= $data['banner_active_class'] . ' ' . $data['banner_mode_class'] ?>">
                 <?= $data['banner_text'] ?>
@@ -30,7 +29,7 @@
                         <th>Uprawnienia</th>
                         <th>Akcja</th>
                     </tr>
-                    <?php for ($i = 0; $i < $data['users_count']; $i++) { ?>
+                    <?php for ($i = 0; $i < count($data['users_data']); $i++) { ?>
                         <tr>
                             <td class="cell--lp"><?= $i + 1 ?></td>
                             <td><?= $data['users_data'][$i]->get_first_name() ?></td>

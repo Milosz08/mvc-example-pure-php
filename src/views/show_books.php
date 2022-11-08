@@ -13,7 +13,6 @@
 
     <main class="app__content">
         <h1>Książki</h1>
-
         <div class="table-with-banner__container">
             <div id="banner-container" class="app__banner <?= $data['banner_active_class'] . ' ' . $data['banner_mode_class'] ?>">
                 <?= $data['banner_text'] ?>
@@ -28,17 +27,19 @@
                         <th>Liczba egzemplarzy</th>
                         <th>Akcja</th>
                     </tr>
-                    <?php for ($i = 0; $i < $data['books_count']; $i++) { ?>
+                    <?php for ($i = 0; $i < count($data['books_data']); $i++) { ?>
                         <tr>
                             <td class="cell--lp"><?= $i + 1 ?></td>
                             <td><?= $data['books_data'][$i]->get_title() ?></td>
                             <td><?= $data['books_data'][$i]->get_authors() ?></td>
                             <td><?= $data['books_data'][$i]->get_copies() ?></td>
                             <td class="cell--center">
-                                <a class="button--default button__variant--normal"
-                                    href="index.php?action=books/rent&_bookid=<?= $data['books_data'][$i]->get_id() ?>">
-                                    Pożycz
-                                </a>
+                                <?php if ($data['books_data'][$i]->get_copies() > 0) { ?>    
+                                    <a class="button--default button__variant--normal"
+                                        href="index.php?action=books/rent&_bookid=<?= $data['books_data'][$i]->get_id() ?>">
+                                        Pożycz
+                                    </a>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>
