@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `books` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(30) COLLATE utf8_polish_ci NOT NULL,
+  `title` varchar(100) COLLATE utf8_polish_ci NOT NULL,
   `authors` varchar(100) COLLATE utf8_polish_ci NOT NULL,
   `copies` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
@@ -39,14 +39,13 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`id`, `title`, `authors`, `copies`) VALUES
-(1, 'Java Tutorial', 'Herbert Schmidt', 10),
-(2, 'dawdawd', 'dawdawd', 6),
-(6, 'Javafsefesf', 'hyhyhyh', 14),
-(7, 'dawdawdawd', 'dawdawdawd', 39),
-(15, 'dawdawdawdawdwad', 'adwawd', 23),
-(16, 'dawdawdawdawdwadd', 'dawdawd', 123),
-(17, 'fgrfrrgfrfrf', 'adfefwefwe, fsefwedfwefd', 45),
-(18, 'Oracle Databases - Full Course', 'Jan Kowalski, Herbert Schmidt', 12);
+(1, 'Podstawy Techniki Mikroprocesorowej', 'Jerzy Jakubiec', 5),
+(2, 'Java - Kompendium programisty, wydanie X', 'Herbert Shildt', 8),
+(3, 'Spring Framework w akcji', 'Craig Walls', 12),
+(4, 'Technika cyfrowa i mikroprocesorowa w ćwiczeniach laboratoryjnych', 'Ryszard Bogacz, Jerzy Roj, Janusz Tokarski', 6),
+(5, 'Calculus and linear algebra in exercises', 'Ewa Łobos, Janina Macura, Beata Sikora', 1),
+(6, 'Programowanie równoległe i rozproszone', 'Andrzej Karbowski, Ewa Niewiadomska-Szynkiewicz', 3),
+(7, 'Oracle. Projektowanie rozproszonych baz danych', 'Robert Wrembel, Bartosz Bębel', 6);
 
 -- --------------------------------------------------------
 
@@ -106,7 +105,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `login`, `password`, `age`, `role_id`) VALUES
-(1, 'Adam', 'Kowalski', 'user', 'df9c96eae17282db25da4a0c5595181b96ed52a5', 25, 1);
+(1, 'Jan', 'Kowalski', 'user', 'df9c96eae17282db25da4a0c5595181b96ed52a5', 25, 1);
 
 --
 -- Indexes for dumped tables
@@ -149,7 +148,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -161,7 +160,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
