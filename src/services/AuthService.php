@@ -76,7 +76,7 @@ class AuthService extends Service
     // Metoda sprawdzająca, czy użytkownik jest zalogowany z jakąś rangą. Jeśli tak, przekierowanie na wybraną stronę.
     public function redirect_only_for_logged()
     {
-        if ($_SESSION['logged_user'] == null) return; // jeśli użytkownik nie jest zalogowany, nie wykonuj przekierowań
+        if (!isset($_SESSION['logged_user'])) return; // jeśli użytkownik nie jest zalogowany, nie wykonuj przekierowań
         // jeśli użytkownik jest zalogowany z rolą administratora, przekieruj do sekcji dla administratora
         if ($_SESSION['logged_user']['user_role'] == Config::get('__ADMIN_ROLE'))
         {
