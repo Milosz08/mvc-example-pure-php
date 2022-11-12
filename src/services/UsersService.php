@@ -157,10 +157,6 @@ class UsersService extends Service
             $this->_banner_text = $e->getMessage(); // przypisanie do banera wiadomości błędu
             $this->_dbh->rollback(); // cofnięcie transakcji
         }
-        finally
-        {
-            $statement->closeCursor(); // zwolnij zasoby
-        }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------

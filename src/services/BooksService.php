@@ -125,16 +125,13 @@ class BooksService extends Service
             $this->_banner_error = false;
 
             $this->_dbh->commit(); // zatwierdzenie transakcji
+            $statement->closeCursor(); // zwolnij zasoby
         }
         catch (Exception $e)
         {
             $this->_banner_error = true;
             $this->_banner_text = $e->getMessage();
             $this->_dbh->rollback(); // cofnij transakcję
-        }
-        finally // wykonaj niezależnie, czy został przechwycony wyjątek czy nie
-        {
-            $statement->closeCursor(); // zwolnij zasoby
         }
     }
 
