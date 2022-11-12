@@ -43,7 +43,7 @@ class AuthService extends Service
             $statement = $this->_dbh->prepare($query); // przygotuj zapytanie
             $statement->execute(array( // wykonanie zapytania SQL
                 $this->_form_data['login']['value'],
-                sha1(Config::get('__SHA1_SALT') . $this->_form_data['login']['value']), // zahaszuj hasło przy użyciu soli
+                sha1(Config::get('__SHA1_SALT') . $this->_form_data['password']['value']), // zahaszuj hasło przy użyciu soli
             ));
 
             $find_user = $statement->fetchObject(LoginUserModel::class); // zmapuj otrzymane dane na obiekt
