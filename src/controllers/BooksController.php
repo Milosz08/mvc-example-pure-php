@@ -29,9 +29,8 @@ class BooksController extends Controller
 	public function show()
     {
         Util::redirect_when_not_logged(); // jeśli jakikolwiek użytkownik nie jest zalogowany, przekieruj do logowania
-        $result = $this->_pdo->get_data_from_db("SELECT * FROM books", BookModel::class);
+        $result = $this->_pdo->get_data_from_db("SELECT * FROM books", BookModel::class); // pobierz wszystkie książki z systemu
         $this->renderer->render('show_books', array(
-            'books_count' => is_array($result) ? count($result) : 0, 
             'books_data' => $result,
             'header_mode' => $_SESSION['logged_user']['user_role'] === Config::get('__ADMIN_ROLE') ? 'admin' : 'user',
         ));

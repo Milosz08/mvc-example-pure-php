@@ -26,7 +26,8 @@ class AuthController extends Controller
     // Alias dla endpointu index.php?action=auth/login. Równoznaczny z endpointem index.php?action=auth.
     public function login()
     {
-        $this->_service->redirect_only_for_logged(); // przekierowanie w przypadku, gdy użytkownik jest już zalogowany, jeśli nie pozostanie na stronie
+        // przekierowanie w przypadku, gdy użytkownik jest już zalogowany, jeśli nie pozostanie na stronie
+        $this->_service->redirect_only_for_logged();
         if (isset($_POST[self::LOGIN_OP_PERFORMED])) // jeśli przesłano dane w formularzu, przejdź do walidacji
         {
             $this->_service->login_user(); // zaloguj użytkownika i przejdź na adres chronionego zasobu

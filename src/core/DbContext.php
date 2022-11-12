@@ -27,13 +27,18 @@ class DbContext
         try
         {
             // stworzenie instancji klasy PDO i połączenie się z bazą danych
-            $this->_db_handler = new PDO(Config::get('__DB_DSN'), Config::get('__DB_USERNAME'), Config::get('__DB_PASSWORD'), 
-            Config::get('__DB_INIT_COMMANDS'));
+            $this->_db_handler = new PDO(
+                Config::get('__DB_DSN'),
+                Config::get('__DB_USERNAME'),
+                Config::get('__DB_PASSWORD'), 
+                Config::get('__DB_INIT_COMMANDS')
+            );
             $this->_db_handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // ustawienie trybu błędów na rzucanie wyjątów
         }
         catch (PDOException $e) // złap wyjątek, jeśli nie zdoła połączyć się z bazą danych
         {
-            echo 'Nie udało połączyć się z bazą danych.';
+            echo 'Nie udało połączyć się z bazą danych.<br>';
+            echo $e->getMessage();
             die;
         }
     }

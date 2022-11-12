@@ -52,7 +52,7 @@ class BooksService extends Service
             $this->_dbh->beginTransaction(); // rozpoczęcie transakcji
 
             // przygotuj zapytania sprawdzające, czy jest duplikat
-            $statement = $this->_dbh->prepare("SELECT COUNT(id) FROM books WHERE LOWER(title) = :title");
+            $statement = $this->_dbh->prepare("SELECT COUNT(id) FROM books WHERE LOWER(title) = ?");
             $statement->execute(array('title' => strtolower($this->_form_data['title']['value']))); // wykonanie komendy
             if (((int)$statement->fetch(PDO::FETCH_NUM)[0]) > 0) // jeśli wartość jest większa od 0, error
             {
@@ -93,9 +93,13 @@ class BooksService extends Service
 
             if (!$is_rent) // sprawdź, czy uytkownik odwołuje sie do id książki która istnieje (jest wypożyczona i można ją zwrócić)
             {
-                $statement = $this->_dbh->prepare("SELECT COUNT(*) FROM books_users_binding WHERE book_id = ? AND user_id = ?"); // przygotuj zapytanie
+                // przygotuj zapytanie
+                $statement = $this->_dbh->prepare("SELECT COUNT(*) FROM books_users_binding WHERE book_id = ? AND `user_id` = ?");
                 $statement->execute(array($existing_book->get_id(), $_SESSION['logged_user']['user_id'])); // wykonaj zapytanie
-                if (empty($statement->fetch(PDO::FETCH_NUM)[0])) throw new Exception("Wybrana książka została już oddana lub nie została wypożyczona.");
+                if (empty($statement->fetch(PDO::FETCH_NUM)[0]))
+                {
+                    throw new Exception("Wybrana książka została już oddana lub nie została wypożyczona.");
+                }
             }
             
             // przygotuj zapytanie wstawiające/usuwające id użytkownika i książki do/z tabeli łączonej

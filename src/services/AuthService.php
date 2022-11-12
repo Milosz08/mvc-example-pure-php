@@ -31,7 +31,7 @@ class AuthService extends Service
     {
         $this->_form_data['login'] = Util::validate_regex_field('login', '/^[a-z0-9]{2,20}$/'); // sprawdź, czy login jest poprawny
         $this->_form_data['password'] = Util::check_if_input_not_empty('password'); // sprawdź, czy hasło nie jest puste
-        if (Util::check_if_form_is_invalid($this->_form_data)) return; //sprawdź, czy formularz zawiera błędy, jeśli tak wyjdź z metody
+        if (Util::check_if_form_is_invalid($this->_form_data)) return; // sprawdź, czy formularz zawiera błędy, jeśli tak wyjdź z metody
         try
         {
             // zapytanie pobierające użytkownika na podstawie loginu oraz zahaszowanego hasła
@@ -61,7 +61,7 @@ class AuthService extends Service
             header('Location:index.php?action=' . $redir_location . '/show'); // przekierowanie na adres
             ob_end_flush(); // zwolnienie bufora
         }
-        catch (Exception $e)
+        catch (Exception $e) // przechwycenie wyjątku
         {
             $this->_banner_text = 'Nieprawidłowy login i/lub hasło. Spróbuj ponownie wprowadzając inne dane.';
         }
