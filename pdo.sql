@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `pdo`
 --
+CREATE DATABASE IF NOT EXISTS `pdo` DEFAULT CHARACTER SET utf8 COLLATE utf8_polish_ci;
+USE `pdo`;
 
 -- --------------------------------------------------------
 
