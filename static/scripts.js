@@ -6,4 +6,5 @@ closeBannerButton.addEventListener('click', function() {
     bannerContainer.classList.remove('app__banner--enabled');
 });
 
+// automatyczne chowanie banera z informacją 3 sekundy po wejściu na stronę
 setTimeout(function() { bannerContainer.classList.remove('app__banner--enabled'); }, 3000);
