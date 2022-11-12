@@ -126,13 +126,23 @@ class UsersService extends Service
                 }
             }
             // przygotuj zapytanie sprawdzające, czy dany użytkownik istnieje oraz czy można go usunąć
-            $statement = $this->_dbh->prepare("SELECT id FROM users WHERE id = ?");
-            $statement->execute(array((int)$user_id));
-            if (!$statement->fetch(PDO::FETCH_NUM)) { // jeśli nie znaleziono użytkownika, błąd
+            $query = "
+                SELECT users.id AS id, roles.name AS `user_role` FROM users INNER JOIN roles ON users.role_id = roles.id WHERE users.id = ?
+            ";
+            $statement = $this->_dbh->prepare($query); // przygotowanie zapytania sprawdzająceg czy użytkownik istnieje
+            $statement->execute(array((int)$user_id)); // wykonanie zapytania
+            $found_user_data = $statement->fetch(PDO::FETCH_ASSOC); // przypisanie rezultatu zapytania do zmiennej
+            $statement->closeCursor(); // zwolnienie zasobów
+            if (!$found_user_data) { // jeśli nie znaleziono użytkownika, błąd
                 throw new Exception('Wybrany użytkownik nie istnieje lub nie jest możliwe jego usunięcie.');
             }
+            // sprawdź, czy nie dochodzi do próby usunięcia samego siebie z systemu
+            if ($_SESSION['logged_user']['user_id'] == $found_user_data['id'])
+            {
+                throw new Exception('Zalogowany użytkownik nie może sam siebie usunąć.');
+            }
             // jeśli w systemie istnieje tylko jeden administrator, nie pozwól na jego usunięcie
-            if ($this->_form_data['role']['value'] === Config::get('__ADMIN_ROLE'))  $this->is_one_system_administrator();
+            if ($found_user_data['user_role'] === Config::get('__ADMIN_ROLE')) $this->is_one_system_administrator();
 
             // usuń użytkownika
             $statement = $this->_dbh->prepare("DELETE FROM users WHERE id = ?"); // przygotuj zapytanie SQL
@@ -200,7 +210,6 @@ class UsersService extends Service
         $query = "SELECT COUNT(users.id) FROM users INNER JOIN roles ON users.role_id = roles.id WHERE roles.name = ?";
         $statement = $this->_dbh->prepare($query); // przygotuj zapytanie SQL
         $statement->execute(array(Config::get('__ADMIN_ROLE'))); // wykonanie zapytania SQL
-        var_dump($statement->fetch(PDO::FETCH_NUM));
         if ($statement->fetch(PDO::FETCH_NUM)[0] < 2) // jeśli kont adminów jest mniej niż 2, nie pozwój na usunięcie
         {
             $statement->closeCursor(); // zwolnienie zasobów
