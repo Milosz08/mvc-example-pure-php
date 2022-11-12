@@ -53,7 +53,7 @@ class BooksService extends Service
 
             // przygotuj zapytania sprawdzające, czy jest duplikat
             $statement = $this->_dbh->prepare("SELECT COUNT(id) FROM books WHERE LOWER(title) = ?");
-            $statement->execute(array('title' => strtolower($this->_form_data['title']['value']))); // wykonanie komendy
+            $statement->execute(array(strtolower($this->_form_data['title']['value']))); // wykonanie komendy
             if (((int)$statement->fetch(PDO::FETCH_NUM)[0]) > 0) // jeśli wartość jest większa od 0, error
             {
                 throw new Exception('Książka z podanym tytułem istnieje już w systemie. Spróbuj ponownie dodać inną książkę.'); 
@@ -73,6 +73,10 @@ class BooksService extends Service
             $this->_banner_text = $e->getMessage(); // przypisz wiadomość błędu do bannera
             $this->_dbh->rollback(); // cofnij transakcję
             return;
+        }
+        finally // wykonaj niezależnie, czy został przechwycony wyjątek czy nie
+        {
+            $statement->closeCursor(); // zwolnij zasoby
         }
         header('Location:index.php?action=books/show'); // przekierowanie na adres
         ob_end_flush(); // zwolnienie bufora
@@ -128,6 +132,10 @@ class BooksService extends Service
             $this->_banner_text = $e->getMessage();
             $this->_dbh->rollback(); // cofnij transakcję
         }
+        finally // wykonaj niezależnie, czy został przechwycony wyjątek czy nie
+        {
+            $statement->closeCursor(); // zwolnij zasoby
+        }
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -170,10 +178,10 @@ class BooksService extends Service
             $this->_dbh->beginTransaction(); // rozpocznij transakcję
             // zapytanie łączące dane z tablicy łączącej i wyszukujące wszystkie wypożyczone książki użytkownika wyszukiwanego po id
             $query = "
-                SELECT DISTINCT books.id AS id, books.title AS title, books.authors AS authors FROM books_users_binding
-                INNER JOIN books ON books_users_binding.book_id = books.id
-                INNER JOIN users ON books_users_binding.user_id = users.id
-                WHERE books_users_binding.user_id = ?
+                SELECT DISTINCT books.id AS id, books.title AS title, books.authors AS authors FROM books_users_binding AS busb
+                INNER JOIN books ON busb.book_id = books.id
+                INNER JOIN users ON busb.user_id = users.id
+                WHERE busb.user_id = ?
             ";
             $statement = $this->_dbh->prepare($query); // przygotuj zapytanie
             $statement->execute(array($user_model->get_id())); // wykonaj zapytanie
@@ -181,8 +189,7 @@ class BooksService extends Service
             {
                 // zapytanie pobierające liczbę wypożyczonej konkretnej książki przez użytkownika
                 $count_query = "
-                    SELECT COUNT(books_users_binding.book_id) FROM books_users_binding
-                    WHERE books_users_binding.user_id = ? AND books_users_binding.book_id = ?
+                    SELECT COUNT(busb.book_id) FROM books_users_binding AS busb WHERE busb.user_id = ? AND busb.book_id = ?
                 ";
                 $count_statement = $this->_dbh->prepare($count_query); // przygotuj zapytanie
                 $count_statement->execute(array($user_model->get_id(), $fetched_rented_book->get_id())); // wykonaj zapytanie
