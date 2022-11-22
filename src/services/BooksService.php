@@ -11,7 +11,6 @@ use App\Core\DbContext;
 use App\Models\UserModel;
 use App\Models\BookModel;
 use App\Models\RentedBookModel;
-use App\Models\RentedBookViewModel;
 
 // Klasa serwisu dla kontrolera BooksController.
 class BooksService extends Service
