@@ -175,24 +175,17 @@ class BooksService extends Service
             $this->_dbh->beginTransaction(); // rozpocznij transakcję
             // zapytanie łączące dane z tablicy łączącej i wyszukujące wszystkie wypożyczone książki użytkownika wyszukiwanego po id
             $query = "
-                SELECT DISTINCT books.id AS id, books.title AS title, books.authors AS authors FROM books_users_binding AS busb
+                SELECT DISTINCT books.id AS id, books.title AS title, books.authors AS authors, COUNT(busb.book_id) AS rented_count
+                FROM books_users_binding AS busb
                 INNER JOIN books ON busb.book_id = books.id
-                INNER JOIN users ON busb.user_id = users.id
                 WHERE busb.user_id = ?
+                GROUP BY busb.book_id
             ";
             $statement = $this->_dbh->prepare($query); // przygotuj zapytanie
             $statement->execute(array($user_model->get_id())); // wykonaj zapytanie
-            while($fetched_rented_book = $statement->fetchObject(RentedBookModel::class)) // przejdź przez wszystkie rekordy i zmapuj
+            while($rented_book = $statement->fetchObject(RentedBookModel::class)) // przejdź przez wszystkie rekordy
             {
-                // zapytanie pobierające liczbę wypożyczonej konkretnej książki przez użytkownika
-                $count_query = "
-                    SELECT COUNT(busb.book_id) FROM books_users_binding AS busb WHERE busb.user_id = ? AND busb.book_id = ?
-                ";
-                $count_statement = $this->_dbh->prepare($count_query); // przygotuj zapytanie
-                $count_statement->execute(array($user_model->get_id(), $fetched_rented_book->get_id())); // wykonaj zapytanie
-
-                $count_of_single_book = $count_statement->fetch(PDO::FETCH_NUM)[0]; // liczba wystąpień pojedynczej książki
-                array_push($user_rented_books, new RentedBookViewModel($fetched_rented_book, $count_of_single_book)); // dodaj do tablicy
+                array_push($user_rented_books, $rented_book);
             }
             $this->_dbh->commit(); // zatwierdź transakcję
         }
