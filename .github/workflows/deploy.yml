@@ -1,0 +1,21 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      CI_OUTPUT: ${{ vars.GH_RUNNER_OUTPUT }}
+      SERVER_OUTPUT: /var/www/mvc-example-pure-php
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Move files to server
+        run: |
+          cp -r "$CI_OUTPUT/src" "$SERVER_OUTPUT/"
+          cp -r "$CI_OUTPUT/static" "$SERVER_OUTPUT/"
+          cp "$CI_OUTPUT/index.php" "$SERVER_OUTPUT/"
