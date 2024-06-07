@@ -12,15 +12,11 @@ class AuthController extends Controller
     private const LOGIN_OP_PERFORMED = 'auth_login_op_performed'; // wyzwalacz przesłania formularza umożliwiającego zalogowanie
     private $_service; // instancja serwisu
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     public function __construct()
     {
         parent::__construct(); // wywołanie konstruktora klasy rodzica (klasa abstrakcyjna Controller)
         $this->_service = AuthService::get_instance(); // pobranie obiektu typu singleton z serwisu
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca zalogowanie użytkownika. Na podstawie danych, tworzy obiekt sesji i przekierowuje do zabezpieczonych sekcji.
     // Alias dla endpointu index.php?action=auth/login. Równoznaczny z endpointem index.php?action=auth.
@@ -41,8 +37,6 @@ class AuthController extends Controller
         ));
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda umożliwiająca wylogowanie użytkownika i niszcząca sesję.
     // Alias dla endpointu index.php?action=auth/logout.
     public function logout()
@@ -51,8 +45,6 @@ class AuthController extends Controller
         session_destroy(); // zniszcz sesję
         $this->index(); // przekieruj na adres poprzez metodę pośredniczącą
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca zalogowanie użytkownika. Na podstawie danych, tworzy obiekt sesji i przekierowuje do zabezpieczonych sekcji.
     // Alias dla endpointu index.php?action=auth. Równoznaczny z endpointem index.php?action=auth/login.

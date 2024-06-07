@@ -14,8 +14,6 @@ class UserModel
     protected $role_name; // klucz obcy do roli
     protected $full_name; // pełna nazwa użytkownika (imię i nazwisko)
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     public function get_id()
     {
         return $this->id;

@@ -9,9 +9,7 @@ class Config
 {
     private static $_values = array(); // globalna tablica zmiennych do konfiguracji aplikacji
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
-    // Metoda umożliwiająca wstawienie nowej wartości do globalnej tablicy konfiguracji w postacji KLUCZ -> WARTOŚĆ. Niedozwolone jest
+    // Metoda umożliwiająca wstawienie nowej wartości do globalnej tablicy konfiguracji w postaci KLUCZ -> WARTOŚĆ. Niedozwolone jest
     // dodawanie wielu wartości z tym samym kluczem.
     public static function set($key, $value)
     {
@@ -22,8 +20,6 @@ class Config
         self::$_values[$key] = $value;
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda umożliwiająca pobranie konkretnej wartości na podstawie przesłanego klucza. Jeśli klucz nie istnieje, wyjątek.
     public static function get($key)
     {
@@ -33,8 +29,6 @@ class Config
         }
         return self::$_values[$key];
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca stworzenie ścieżki z systemowymi separatorami katalogów (co 1 segment)
     public static function build_path(...$segments)

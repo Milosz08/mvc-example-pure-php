@@ -14,7 +14,7 @@ class UsersController extends Controller
 {
     private const ADD_OP_PERFORMED = 'user_add_op_performed'; // wyzwalacz przesłania formularza dodającego użytkownika
     private const EDIT_OP_PERFORMED = 'user_edit_op_performed'; // wyzwalacz przesłania formularza edytującego wybranego użytkownika
-    
+
     private $_service; // instancja serwisu
 
     // zapytanie zwracające wszystkich użytkowników z bazy danych
@@ -24,15 +24,11 @@ class UsersController extends Controller
         INNER JOIN roles ON users.role_id = roles.id
     ";
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-    
     public function __construct()
     {
         parent::__construct(); // wywołenie konstruktora klasy bazowej (stworzenie instancji klasy renderer)
         $this->_service = UsersService::get_instance(); // pobranie obiektu typu singleton z serwisu
     }
-	
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda wyświetlająca wszystkich użytkowników aplikacji. Dostęp tylko dla administratora.
     // Alias dla endpointu index.php?action=users, równoznaczny z endpointem index.php?action=users/show
@@ -44,8 +40,6 @@ class UsersController extends Controller
             'users_data' => $result,
         ));
 	}
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda usuwająca wybranego użytkownika z bazy danych. Dostęp tylko dla administratora.
     // Alias dla endpointu index.php?action=users/remove&_userid=INT.
@@ -62,8 +56,6 @@ class UsersController extends Controller
             'banner_mode_class' => $this->_service->get_banner_error() ? 'app__banner--error' : 'app__banner--info',
         ));
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda dodająca nowego użytkownika do bazy danych. Dostęp tylko dla administratora.
     // Alias dla endpointu index.php?action=users/add
@@ -84,8 +76,6 @@ class UsersController extends Controller
             'banner_active_class' => !empty($this->_service->get_banner_text()) ? 'app__banner--enabled' : '',
         ));
 	}
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca edycję wybranego użytkownika. Dostęp tylko dla administratora.
     // Alias dla endpointu index.php?action=users/edit&_userid=INT.
@@ -110,8 +100,6 @@ class UsersController extends Controller
         ));
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda umożliwiające pokazanie książek wypożyczonych przez wybranego użytkownika. Dostęp tylko dla administratora.
     // Alias dla endpointu index.php?action=users/books&_userid=INT.
     public function books()
@@ -128,8 +116,6 @@ class UsersController extends Controller
         ));
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-    
     // Metoda wyświetlająca wszystkich użytkowników aplikacji. Dostęp tylko dla administratora.
     // Alias dla endpointu index.php?action=users/show, równoznaczny z endpointem index.php?action=users
     public function index()

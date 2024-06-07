@@ -4,8 +4,6 @@ use App\Core\Config;
 
 // Plik do wprowadzania konfiguracji aplikacji w postaci wartości KLUCZ->WARTOŚĆ
 
-//------------------------------------------------------------------------------------------------------------------------------------------
-
 Config::set('__ADMIN_ROLE', 'administrator');                                                       // rola administratora
 Config::set('__USER_ROLE', 'czytelnik');                                                            // rola czytelnika (zwykły użytkownik)
 Config::set('__ROLES', array(Config::get('__USER_ROLE'), Config::get('__ADMIN_ROLE')));             // tablica ról użytkowników aplikacji

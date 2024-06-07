@@ -14,16 +14,12 @@ class BooksController extends Controller
     private const ADD_OP_PERFORMED = 'book_add_op_performed'; // wyzwalacz przesłania formularza dodającego nową książkę
     private $_service; // instancja serwisu
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     public function __construct()
     {
         parent::__construct(); // wywołenie konstruktora klasy bazowej (stworzenie instancji klasy renderer)
         $this->_service = BooksService::get_instance(); // pobranie obiektu typu singleton z serwisu
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-	
     // Wyświetlanie wszystkich książek w formie tabeli. Dostęp dla obu poziomów uprawnień, z różnicami w interfejsie.
     // Alias dla endpointu index.php?action=books, równoznaczny z endpointem index.php?action=books/show.
 	public function show()
@@ -35,8 +31,6 @@ class BooksController extends Controller
             'header_mode' => $_SESSION['logged_user']['user_role'] === Config::get('__ADMIN_ROLE') ? 'admin' : 'user',
         ));
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Dodawanie nowej książki. Dostęp tylko dla administratora.
     // Alias dla endpointu index.php?action=books/add.
@@ -56,8 +50,6 @@ class BooksController extends Controller
         ));
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Wyświetlanie wszystkich książek wypożyczonych przez zalogowanego czytelnika, z możliwością zwrotu. Dostęp tylko z dla zalogowanych.
     // Alias dla endpointu index.php?action=books/rents.
     public function rents()
@@ -76,8 +68,6 @@ class BooksController extends Controller
             'banner_mode_class' => $this->_service->get_banner_error() ? 'app__banner--error' : 'app__banner--info',
         ));
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Akcja do wypożyczenia konkretnej książki przez zalogowanego użytkownika.
     // Alias dla endpointu index.php?action=books/rent?_bookid=INT.
@@ -100,8 +90,6 @@ class BooksController extends Controller
             'banner_mode_class' => $this->_service->get_banner_error() ? 'app__banner--error' : 'app__banner--info',
         ));
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Akcja do zwrócenia wypożyczonej konkretnej książki przez zalogowanego użytkownika.
     // Alias dla endpointu index.php?action=books/refund?_bookid=INT.
@@ -127,8 +115,6 @@ class BooksController extends Controller
             'banner_mode_class' => $this->_service->get_banner_error() ? 'app__banner--error' : 'app__banner--info',
         ));
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Wyświetlanie wszystkich książek w systemie. Dostęp dla obu poziomów uprawnień, z różnicami w interfejsie.
     // Alias dla endpointu index.php?action=books/show, równoznaczne z index.php?action=books.

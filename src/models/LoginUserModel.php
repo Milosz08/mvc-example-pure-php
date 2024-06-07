@@ -10,8 +10,6 @@ class LoginUserModel
     protected $full_name;
     protected $user_role;
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     public function get_id()
     {
         return $this->id;

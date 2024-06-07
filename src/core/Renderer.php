@@ -7,11 +7,7 @@ class Renderer
 {
     private static $_instance; // instancja obiektu typu singleton
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     private function __construct() {}
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda odpowiadająca za renderowanie widoku (na podstawie nazwy przekazanej w parametrze).
     // Jeśli nie znajdzie widoku, error. Pierwszy parametr odpowiada za nazwę widoku (bez rozszerzenia)
@@ -20,8 +16,6 @@ class Renderer
     {
         require_once Config::get('__MVC_VIEWS_DIR') . $view . '.php';
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // stworzenie (jeśli obiekt nie istnieje) oraz zwrócenie instancji klasy Renderer
     public static function get_instance()

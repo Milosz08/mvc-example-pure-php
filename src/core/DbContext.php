@@ -20,8 +20,6 @@ class DbContext
         WHERE users.id = :id_sant
     ";
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     private function __construct()
     {
         try
@@ -42,8 +40,6 @@ class DbContext
             die;
         }
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------    
 
     // Metoda umożliwiająca pobranie danych z wybranej tabeli i zmapowanie na obiekt wybranej klasy której nazwa przekazywana 
     // jest w parametrach metody. Jeśli poda się parametr id, wówczas zostanie pobrany jeden rekord na podstawie tego parametru.
@@ -73,8 +69,6 @@ class DbContext
         return $data_array;
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda sprawdzająca, czy element istnieje w bazie danych (przekazywany poprzez $_GET). Jeśli istnieje, zwróć element. W przeciwnym
     // wypadku przekieruj do wybranego kontrolera na wybraną akcję.
     public function check_if_exist($sql_query, $model_clazz, $param_name_or_id, $redirect_controller, $redirect_action)
@@ -89,15 +83,11 @@ class DbContext
         header('Location:index.php?action=' . $redirect_controller . '/' . $redirect_action); // przekierowanie
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda getter zwracająca uchwyt do bazy danych
     public function get_handler()
     {
         return $this->_db_handler;
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // stworzenie (jeśli obiekt nie istnieje) oraz zwrócenie instancji PDO
     public static function get_instance()

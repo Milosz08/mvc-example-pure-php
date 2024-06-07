@@ -14,16 +14,12 @@ class AuthService extends Service
     private static $_instance; // instancja klasy na podstawie wzorca singleton
     private $_form_data = array('login', 'password'); // tablica wartości z formularza logowania
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     protected function __construct()
     {
         parent::__construct(); // wywołanie konstruktora klasy nadrzędnej
         // automatyczne wypełnienie każdego pola dodatkową tablicą przechowującą poprzednią wartość i wiadomość błędu
         $this->_form_data = Util::fill_form_assoc($this->_form_data);
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca zalogowanie użytkownia. Sprawdza, czy użytkownik istnieje, jeśli nie przekazuje błąd do kontrolera.
     // Jeśli natomiast użytkownik istnienie, zapisu nowy obiekt w sesji i przenosi do chronionych zasobów serwera.
@@ -71,8 +67,6 @@ class AuthService extends Service
         }
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda sprawdzająca, czy użytkownik jest zalogowany z jakąś rangą. Jeśli tak, przekierowanie na wybraną stronę.
     public function redirect_only_for_logged()
     {
@@ -91,15 +85,11 @@ class AuthService extends Service
         }
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda zwracająca elementy formularza jako tablicę wartości i wiadomości błędów
     public function get_form_validatior_auth()
     {
         return $this->_form_data;
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Instantancja obiektu typu singleton
     public static function get_instance()

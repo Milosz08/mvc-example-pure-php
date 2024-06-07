@@ -23,8 +23,6 @@ class Util
         );
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda umożliwiająca walidację pola na podstawie wzoru regex oraz to, czy pole nie jest puste.
     public static function validate_regex_field($input_name, $regex_pattern)
     {
@@ -43,8 +41,6 @@ class Util
         }
         return $array_input;
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda walidująca dla inputu liczbowego przyjmująca nazwę inputu oraz zakres od do którego ma walidować (zakres ten jest 
     // obustronnie domknięty).
@@ -79,8 +75,6 @@ class Util
         );
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda parsująca globalną tablicę permisji w tagi option wysyłane do widoku.
     public static function parse_users_permissions($selected_value = '')
     {
@@ -93,8 +87,6 @@ class Util
         return $permissions_html; // zwróć skonkatenowany string
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda sprawdzająca, czy w przesyłanej tablicy nie znajdują się wiadomości error.
     public static function check_if_form_is_invalid($form_data)
     {
@@ -106,15 +98,11 @@ class Util
         return false; // w przeciwnym wypadku wszystko OK i zwróć false
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda wypełniająca wszystkie elementy tablicy zwykłej z pól formularzy tablicą asocjacyjną z wartością pola i wiadomością błędu.
     public static function fill_form_assoc(& $inputs_array) // przekazanie tablicy przez referencję
     {
         return array_fill_keys($inputs_array, array('value' => '', 'error_message' => ''));
     }
-    
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda przekierowująca użytkownika na stronę z logowaniem, jeśli nie jest zalogowany. Przyjmuje wiele argumentów jako wartości
     // parametrów configu z rolami. Tylko użytkownicy z przekazanymi rolami będą mogli wejść na stronę, w przeciwnym wypadku przekierowanie.

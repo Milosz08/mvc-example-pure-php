@@ -18,16 +18,12 @@ class BooksService extends Service
     private static $_instance; // instancja klasy na podstawie wzorca singleton
     private $_form_data = array('title', 'authors', 'copies'); // tablica wartości z formularza dodawania/edycji książki
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     protected function __construct()
     {
         parent::__construct(); // wywołanie konstruktora klasy nadrzędnej
         // automatyczne wypełnienie każdego pola dodatkową tablicą przechowującą poprzednią wartość i wiadomość błędu
         $this->_form_data = Util::fill_form_assoc($this->_form_data);
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda zapełniająca wartości formularza nadesłane z bazy danych na podstawie zmapowanego obiektu.
     public function add_book_values_from_query($book_model)
@@ -36,8 +32,6 @@ class BooksService extends Service
         $this->_form_data['authors'] = array('value' => $book_model->get_authors(), 'error_message' => '');
         $this->_form_data['copies'] = array('value' => $book_model->get_copies(), 'error_message' => '');
     }
-    
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca stworzenie nowej książki. Sprawdza czy nie doszła próba dodania duplikatu (na podstawie tytułu).
     public function create_new_book()
@@ -81,8 +75,6 @@ class BooksService extends Service
         ob_end_flush(); // zwolnienie bufora
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Uniwersalna metoda do pożyczania, oddawania książki. Na podstawie parametrów oraz kwerend następuje oddanie bądź pożyczenie książki.
     public function rent_refund_selected_book($mode_descr_first, $mode_descr_second, $first_query, $second_query, $is_rent = false)
     {
@@ -111,7 +103,7 @@ class BooksService extends Service
             
             // jeśli nie uda się zmienić danych książki do tabeli łączonej, wyrzuć wyjątek
             if (!$add_status) throw new Exception('Nieudane ' . $mode_descr_first . ' książki. Spróbuj ponownie.');
-           
+
             // przygotuj zapytanie dekrementujące/inkrementujące ilość dostępnych książek na podstawie id książki
             $statement = $this->_dbh->prepare($second_query);
             $update_status = $statement->execute(array($existing_book->get_id())); // wykonanie komendy
@@ -120,7 +112,7 @@ class BooksService extends Service
 
             // wyświetl komunikat o poprawnym wypoyczeniu/oddaniu książki
             $this->_banner_text = 'Książka "' . $existing_book->get_title() . '" została ' . $mode_descr_second . ' przez użytkownika "' . 
-                                   $_SESSION['logged_user']['full_name'] . '".';
+                                    $_SESSION['logged_user']['full_name'] . '".';
             $this->_banner_error = false;
 
             $this->_dbh->commit(); // zatwierdzenie transakcji
@@ -133,8 +125,6 @@ class BooksService extends Service
             $this->_dbh->rollback(); // cofnij transakcję
         }
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda sprawdzająca, czy użytkownik przechodzący na stronę z wypożyczonymi książkami jest administratorem bądź czytelnikiem i 
     // zwracająca obiekt znalezionego użytkownika na podstawie id. Jeśli nie znajdzie użytkownika, przekierowanie na wybrany adres.
@@ -162,8 +152,6 @@ class BooksService extends Service
             'user_full_name' => $is_admin ? $found_user->get_full_name() : $_SESSION['logged_user']['full_name'], // nazwa w headerze
         );
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda zwracająca wszystkie książki (bazując na klasie modelu książki) z bazy danych konkretnego użytkownika wyszukiwanego po id.
     public function return_rents_books($user_model)
@@ -201,15 +189,11 @@ class BooksService extends Service
         return $user_rented_books;
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda zwracająca elementy formularza jako tablicę wartości i wiadomości błędów
     public function get_form_validatior_book()
     {
         return $this->_form_data;
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Instantancja obiektu typu singleton
     public static function get_instance()

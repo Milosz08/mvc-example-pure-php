@@ -10,8 +10,6 @@ class BookModel
     protected $authors; // kolumna z autorami
     protected $copies; // kolumna z liczbą egzemplarzy
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     public function get_id()
     {
         return $this->id;

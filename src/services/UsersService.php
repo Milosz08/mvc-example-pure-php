@@ -14,16 +14,12 @@ class UsersService extends Service
     private static $_instance; // instancja klasy na podstawie wzorca singleton
     private $_form_data = array('first_name', 'last_name', 'login', 'age', 'role'); // tablica z polami dodawania/edytowania użytkownika
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     protected function __construct()
     {
         parent::__construct();
         // automatyczne wypełnienie każdego pola dodatkową tablicą przechowującą poprzednią wartość i wiadomość błędu
         $this->_form_data = Util::fill_form_assoc($this->_form_data);
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca dodanie nowego użytkownia. Waliduje a następnie dodaje przy wykorzystaniu transakcji użytkownika do bazy danych
     // na podstawie parametrów formularza.
@@ -58,8 +54,6 @@ class UsersService extends Service
             $this->_dbh->rollback(); // cofnięcie transakcji
         }
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda odpowiadająca za edytowanie wybranego użytkownika na podstawie ID. Jeśli użytkownik nie istnieje, error. Metoda również nie
     // pozwala na przypisanie użytkownikowi rangi czytelnik, jeśli w systemie nie będzie żadnego administratora.
@@ -103,8 +97,6 @@ class UsersService extends Service
             $this->_dbh->rollback(); // cofnięcie transakcji
         }
     }
-    
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda umożliwiająca usuwanie użytkownika z systemu. Nie pozwala na usunięcie administratora, jeśli jest on jeden w systemie.
     // Przed usunięciem użytkownika sprawdza, czy nie miał wypożyczonych książek, jeśli miał, książki dodają się do tabeli książek
@@ -159,8 +151,6 @@ class UsersService extends Service
         }
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda pobierająca rolę z bazy danych na podstawie nazwy i zwracająca id. Jeśli nie znajdzie, exception.
     public function get_role_id_based_name()
     {
@@ -174,8 +164,6 @@ class UsersService extends Service
         }
         return $role_id;
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda sprawdzająca czy podany przez administratora login przy tworzeniu/edytowaniu użytkownika jest poprawny.
     // Jeśli nie jest, exception.
@@ -196,8 +184,6 @@ class UsersService extends Service
         $statement->closeCursor(); // zwolnienie zasobów
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda umożliwiająca sprawdzenie, ile w systemie istnieje kont z rangą administratora. Jeśli jest tylko jedno konto, zwraca true i
     // wiadomość błędu informującą, że nie można usunąć jednego administratora
     private function is_one_system_administrator()
@@ -214,8 +200,6 @@ class UsersService extends Service
         $statement->closeCursor(); // zwolnienie zasobów
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda odpowiadająca za walidowanie formularza wprowadzania nowego użytkownika oraz edycji istniejącego.
     private function validate_form_add_edit_user()
     {
@@ -226,9 +210,7 @@ class UsersService extends Service
         $this->_form_data['role'] = Util::check_if_input_not_empty('role'); // sprawdź, czy uprawnienia/rola nie są puste
         $this->_form_data['age'] = Util::validate_number_field('age', 13, 100); // sprawdź, czy wiek mieści się w przedziale
     }
-    
-    //--------------------------------------------------------------------------------------------------------------------------------------
-    
+
     // Metoda odpowiadająca za przypisanie wartości z modelu użytkownika do tablicy inputów. Niezbędna do zachowania treści po odświeżeniu
     // przeglądarki poprzez wysłanie requesta POST z danymi formularza.
     public function add_user_values_from_query($user_model)
@@ -240,15 +222,11 @@ class UsersService extends Service
         $this->_form_data['role'] = array('value' => $user_model->get_role_name(), 'error_message' => '');
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     // Metoda zwracająca szczegółowe informacje na temat walidacji pól formularza dodawania/edycji użytkownika
     public function get_form_validatior_user()
     {
         return $this->_form_data;
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Instantancja obiektu typu singleton
     public static function get_instance()

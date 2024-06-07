@@ -12,15 +12,11 @@ class MvcApplication
     private $controller_instance; // instancja aktualnie załadowanego kontrolera
     private $renderer_instance; // instancja klasy renderującej widoki
 
-    //--------------------------------------------------------------------------------------------------------------------------------------    
-
     private function __construct()
     {
         $this->renderer_instance = Renderer::get_instance();
         $this->render_mvc();
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------    
 
     // Metoda odpowiadająca za tworzenie i wywoływanie metody kontrolera na podstawie parametrów
     // ścieżki URL. Jeśli nie znajdzie kontrolera, rzucany jest wyjątek który po przechwyceniu
@@ -57,8 +53,6 @@ class MvcApplication
         }
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------    
-
     // Metoda odpowiadająca za parsowanie adresu URL z parametrami zapytania. Jeśli nie znajdzie parametrów,
     // zwracane są domyślne zdefiniowane jako stałe w powyższej klasie. Jeśli natomiast znajdzie, zwracana jest nazwa
     // kontrolera (bez rozszerzenia) wraz z metodą.
@@ -85,16 +79,12 @@ class MvcApplication
         );
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------    
-
     // Metoda odpowiadająca za parsowanie nazwy kontrolera. Na podstawie parametru ustawia pierwszy znak na
     // wielką literę i dodaje suffix, zdefiniowany jako stała w powyższej klasie.
     private function parse_controller_name($controller_raw_name)
     {
         return ucfirst($controller_raw_name) . Config::get('__MVC_CONTROLLER_SUFFIX');
     }
-    
-    //--------------------------------------------------------------------------------------------------------------------------------------  
 
     // główna metoda uruchamiająca aplikację poprzez stworzenie instancji klasy MvcApplication
     public static function run()

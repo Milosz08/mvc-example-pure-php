@@ -7,14 +7,10 @@ class CoreLoader
 {
     private static $_instance; // instancja loadera
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     private function __construct()
     {
         $this->scan_dirs_and_load();
     }
-    
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Skanowanie wybranych katalogów i ładowanie plików do kontekstu aplikacji.
     private function scan_dirs_and_load()
@@ -30,8 +26,6 @@ class CoreLoader
             }
         }
     }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     // Metoda uruchamiana przez uruchomieniem głównej metody run z klasy MvcApplication umożliwiająca stworzenie instancji Loadera i w
     // wyniku tego załadowanie do kontekstu aplikacji plików.

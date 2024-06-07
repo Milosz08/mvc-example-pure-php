@@ -10,8 +10,6 @@ class RentedBookModel
     protected $authors; // kolumna z autorami wypożyczonej książki
     protected $rented_count; // przeliczona kolumna z ilością wypożyczonych książek (komenda SQL)
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
     public function get_id()
     {
         return $this->id;
