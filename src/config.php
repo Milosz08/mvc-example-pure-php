@@ -1,9 +1,9 @@
 <?php
 
 use App\Core\Config;
-use App\Utils;
+use App\Utils\Util;
 
-Util::loadEnv(__DIR__ . '/.env');
+Util::load_env(__DIR__ . '/.env');
 
 // Plik do wprowadzania konfiguracji aplikacji w postaci wartości KLUCZ->WARTOŚĆ
 

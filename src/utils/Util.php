@@ -123,7 +123,7 @@ class Util
     }
 
     // Metoda ładująca zmienne środowiskowe z pliku env
-    public static function loadEnv($filePath)
+    public static function load_env($filePath)
     {
         if (!file_exists($filePath)) die;
 
