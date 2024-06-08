@@ -3,7 +3,7 @@
 use App\Core\Config;
 use App\Utils\Util;
 
-Util::load_env(__DIR__ . '/.env');
+Util::load_env('.env');
 
 // Plik do wprowadzania konfiguracji aplikacji w postaci wartości KLUCZ->WARTOŚĆ
 
