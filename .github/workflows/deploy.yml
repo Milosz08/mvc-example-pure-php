@@ -14,6 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Clear web container
+        run: rm "$SERVER_OUTPUT/*"
+
+      - name: Create .env file
+        run: |
+          touch "$SERVER_OUTPUT/.env"
+          echo "${{ secrets.PROD_ENV_FILE }}" > "$SERVER_OUTPUT/.env"
+
       - name: Move files to server
         run: |
           cp -r "$CI_OUTPUT/src" "$SERVER_OUTPUT/"

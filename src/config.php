@@ -1,6 +1,9 @@
 <?php
 
 use App\Core\Config;
+use App\Utils;
+
+Util::loadEnv(__DIR__ . '/.env');
 
 // Plik do wprowadzania konfiguracji aplikacji w postaci wartości KLUCZ->WARTOŚĆ
 
@@ -17,9 +20,9 @@ Config::set('__MVC_VIEWS_DIR', Config::build_path(__DIR__, 'views'));           
 Config::set('__MVC_VIEWS_PARTIALS_DIR', Config::build_path(__DIR__, 'views', 'partials'));          // ścieżka do widoków częściowych aplikacji
 Config::set('__MVC_CONTROLLERS_NAMESPACE', 'App\Controllers\\');                                    // przestrzeń nazw dla kontrolerów
 
-Config::set('__DB_DSN', 'mysql:host=localhost;dbname=pdo');                                         // data source name do bazy danych
-Config::set('__DB_USERNAME', 'root');                                                               // nazwa użytkownika bazy danych
-Config::set('__DB_PASSWORD', '');                                                                   // hasło użytkownika bazy danych
+Config::set('__DB_DSN', 'mysql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_NAME'));        // data source name do bazy danych
+Config::set('__DB_USERNAME', getenv('DB_USERNAME'));                                                // nazwa użytkownika bazy danych
+Config::set('__DB_PASSWORD', getenv('DB_PASSWORD'));                                                // hasło użytkownika bazy danych
 Config::set('__DB_INIT_COMMANDS', array(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "UTF8"'));         // wymuszenie kodowania znaków UTF-8
 
-Config::set('__SHA1_SALT', 'oj0SMXz7i9sDK0JAw0ZgKRtDYek5hMVj3VEbiGgt1ISJ2ZGfvqATWtT0Dlkaw7Qlv6n');  // sól do algorytmu haszującego hasła
+Config::set('__SHA1_SALT', getenv('SHA_SALT'));                                                  // sól do algorytmu haszującego hasła
