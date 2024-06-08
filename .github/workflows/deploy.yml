@@ -14,9 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Clear web container
-        run: rm -r "$SERVER_OUTPUT/*"
-
       - name: Create .env file
         run: |
           touch "$SERVER_OUTPUT/.env"
