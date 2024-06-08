@@ -4,6 +4,11 @@ Simple example of MVC application in pure PHP 7.4 with MySQL database and PDO wr
 
 Demo available at: [biblio.miloszgilga.pl](https://biblio.miloszgilga.pl).
 
+| account | username | password |
+| ------- | -------- | -------- |
+| admin   | user     | user     |
+| user    | anowak   | anowak   |
+
 ## Table of content
 - [Table of content](#table-of-content)
 - [Clone and install](#clone-and-install)
