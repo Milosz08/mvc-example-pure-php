@@ -25,4 +25,4 @@ Config::set('__DB_USERNAME', getenv('DB_USERNAME'));                            
 Config::set('__DB_PASSWORD', getenv('DB_PASSWORD'));                                                // hasło użytkownika bazy danych
 Config::set('__DB_INIT_COMMANDS', array(PDO::MYSQL_ATTR_INIT_COMMAND, 'SET NAMES "UTF8"'));         // wymuszenie kodowania znaków UTF-8
 
-Config::set('__SHA1_SALT', getenv('SHA_SALT'));                                                  // sól do algorytmu haszującego hasła
+Config::set('__SHA1_SALT', getenv('SHA_SALT'));                                                     // sól do algorytmu haszującego hasła
