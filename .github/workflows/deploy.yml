@@ -5,22 +5,35 @@ on:
     branches: ["master"]
 
 jobs:
-  build:
-    runs-on: self-hosted
+  deploy:
+    runs-on: ubuntu-latest
     env:
-      CI_OUTPUT: ${{ vars.GH_RUNNER_OUTPUT }}
       SERVER_OUTPUT: /var/www/mvc-example-pure-php
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create .env file
-        run: |
-          touch "$SERVER_OUTPUT/.env"
-          echo "${{ secrets.PROD_ENV_FILE }}" > "$SERVER_OUTPUT/.env"
-
       - name: Move files to server
-        run: |
-          cp -r "$CI_OUTPUT/src" "$SERVER_OUTPUT/"
-          cp -r "$CI_OUTPUT/static" "$SERVER_OUTPUT/"
-          cp "$CI_OUTPUT/index.php" "$SERVER_OUTPUT/"
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          source: "src/*,static/*,index.php"
+          target: $SERVER_OUTPUT
+          rm: true
+          strip_components: 1
+
+      - name: Create .env file
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            touch "$SERVER_OUTPUT/.env"
+            echo "${{ secrets.PROD_ENV_FILE }}" > "$SERVER_OUTPUT/.env"
