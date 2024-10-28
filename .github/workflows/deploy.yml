@@ -22,7 +22,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "src/*,static/*,index.php"
-          target: $SERVER_OUTPUT
+          target: ${{ env.SERVER_OUTPUT }}
           rm: true
           strip_components: 1
 
