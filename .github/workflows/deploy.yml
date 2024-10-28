@@ -25,7 +25,7 @@ jobs:
           target: ${{ env.SERVER_OUTPUT }}
           rm: true
 
-      - name: Create .env file
+      - name: Create configuration file
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -33,6 +33,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script: |
-            touch "${{ env.SERVER_OUTPUT }}/.env"
-            echo "${{ secrets.PROD_ENV_FILE }}" > "${{ env.SERVER_OUTPUT }}/.env"
+          script: ~/exec/make-conf ${{ env.SERVER_OUTPUT }} "${{ secrets.CONFIG_FILE_CONTENT }}"
