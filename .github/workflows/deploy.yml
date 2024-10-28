@@ -35,5 +35,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            touch "$SERVER_OUTPUT/.env"
-            echo "${{ secrets.PROD_ENV_FILE }}" > "$SERVER_OUTPUT/.env"
+            touch "${{ env.SERVER_OUTPUT }}/.env"
+            echo "${{ secrets.PROD_ENV_FILE }}" > "${{ env.SERVER_OUTPUT }}/.env"
