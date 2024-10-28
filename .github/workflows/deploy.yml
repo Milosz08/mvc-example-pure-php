@@ -24,7 +24,6 @@ jobs:
           source: "src/*,static/*,index.php"
           target: ${{ env.SERVER_OUTPUT }}
           rm: true
-          strip_components: 1
 
       - name: Create .env file
         uses: appleboy/ssh-action@v1.1.0
